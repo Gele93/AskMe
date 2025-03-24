@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using AskMe.Data.Entities;
+using AskMe.Data.Seeders;
+using Microsoft.AspNetCore.Builder;
 
 namespace AskMe
 {
@@ -16,20 +18,19 @@ namespace AskMe
         {
             var builder = WebApplication.CreateBuilder(args);
             var configurations = builder.Configuration;
+            var connectionString = Environment.GetEnvironmentVariable("DbConnectionString");
 
-            var app = builder.Build();
+            if (String.IsNullOrEmpty(connectionString))
+            {
+                connectionString = configurations["ConnectionString"];
+            }
 
-            AddDatabase(builder, configurations);
+            AddServices(builder);
+            AddDatabase(builder, connectionString);
             AddAuthentication(builder, configurations);
             AddIdentity(builder);
 
-            using (var scope = app.Services.CreateScope())
-            {
-                var dbContext = scope.ServiceProvider.GetRequiredService<AskMeContext>();
-                dbContext.Database.Migrate();
-            }
-
-
+            var app = builder.Build();
 
             using (var scope = app.Services.CreateScope())
             {
@@ -61,40 +62,35 @@ namespace AskMe
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddScoped<AuthSeeder>();
+
         }
 
 
-        //ADD AUTH SEED CALLS
         static async Task SeedRolesAndAdminAsync(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, WebApplication app, IConfiguration config)
         {
             if (!await roleManager.RoleExistsAsync(config["Roles:Admin"]))
             {
                 using var scope = app.Services.CreateScope();
-
-                //CALL AUTH SEEDER
-                /*
-                var authenticationSeeder = scope.ServiceProvider.GetRequiredService<AuthenticationSeeder>();
+                var authenticationSeeder = scope.ServiceProvider.GetRequiredService<AuthSeeder>();
                 authenticationSeeder.AddRoles();
-            */
             }
-            var adminUser = await userManager.FindByEmailAsync(config["Users:Admin:Email"]);
+            var adminUser = await userManager.FindByEmailAsync(config["Users:Admin:email"]);
             if (adminUser == null)
             {
                 using var scope = app.Services.CreateScope();
-                // CALL AUTH SEEDER
-                /*
-                var authenticationSeeder = scope.ServiceProvider.GetRequiredService<AuthenticationSeeder>();
+                var authenticationSeeder = scope.ServiceProvider.GetRequiredService<AuthSeeder>();
                 authenticationSeeder.CreateAdminIfNotExists();
-            */
             }
         }
 
-        static void AddDatabase(WebApplicationBuilder builder, IConfiguration config)
+        static void AddDatabase(WebApplicationBuilder builder, string connectionString)
         {
             builder.Services.AddDbContext<AskMeContext>(options =>
             {
+                Console.WriteLine($"CONNECTION STRING:  {connectionString}");
                 options.UseSqlServer(
-                    config["ConnectionString"],
+                    connectionString,
                     sqlOptions => sqlOptions.EnableRetryOnFailure(
                         maxRetryCount: 5,
                         maxRetryDelay: TimeSpan.FromSeconds(10),
