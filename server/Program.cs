@@ -9,6 +9,7 @@ using System.Text;
 using AskMe.Data.Entities;
 using AskMe.Data.Seeders;
 using Microsoft.AspNetCore.Builder;
+using AskMe.Services.UserServices;
 
 namespace AskMe
 {
@@ -63,6 +64,9 @@ namespace AskMe
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddScoped<AuthSeeder>();
+            builder.Services.AddScoped<ITokenService, TokenService>();
+            builder.Services.AddScoped<IUserService, UserService>();
+
 
         }
 
