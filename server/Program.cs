@@ -10,6 +10,10 @@ using AskMe.Data.Entities;
 using AskMe.Data.Seeders;
 using Microsoft.AspNetCore.Builder;
 using AskMe.Services.UserServices;
+using AskMe.Services.Formaters;
+using AskMe.Services.Readers;
+using AskMe.Services.Sets;
+using AskMe.Repositories.Sets;
 
 namespace AskMe
 {
@@ -66,7 +70,10 @@ namespace AskMe
             builder.Services.AddScoped<AuthSeeder>();
             builder.Services.AddScoped<ITokenService, TokenService>();
             builder.Services.AddScoped<IUserService, UserService>();
-
+            builder.Services.AddScoped<ITxtFormater, TxtFormater>();
+            builder.Services.AddScoped<ITxtReader, TxtReader>();
+            builder.Services.AddScoped<ISetService, SetService>();
+            builder.Services.AddScoped<ISetRepository, SetRepository>();
 
         }
 

@@ -38,8 +38,8 @@ namespace AskMe.Data.Context
 
             modelBuilder.Entity<Answer>()
                 .HasOne(a => a.Question)
-                .WithOne(q => q.Answer)
-                .HasForeignKey<Answer>(a => a.QuestionId)
+                .WithMany(q => q.Answers)
+                .HasForeignKey(q => q.QuestionId)
                 .OnDelete(DeleteBehavior.Cascade);
         }
 

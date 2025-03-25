@@ -51,7 +51,7 @@ namespace AskMe.Services.UserServices
                 new Claim(ClaimTypes.NameIdentifier, user.Id),
                 new Claim(ClaimTypes.Name, user.UserName),
                 new Claim(ClaimTypes.Email, user.Email),
-                new Claim("SubscriptionLevel", user.SubscriptionLevel.ToString())
+                new Claim("SubscriptionLevel", user.SubscriptionLevel.ToString()),
                 new Claim("FirstName", user.FirstName),
                 new Claim("LastName", user.LastName),
 
