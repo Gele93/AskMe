@@ -3,19 +3,22 @@ using Microsoft.AspNetCore.Identity;
 
 namespace AskMe.Data.Seeders
 {
-    public class AuthSeeder(RoleManager<IdentityRole> roleManager, UserManager<User> userManager, IConfiguration config)
+    public class AuthSeeder
     {
-        private RoleManager<IdentityRole> _roleManager = roleManager;
-        private UserManager<User> _userManager = userManager;
-        private IConfiguration _config = config;
+        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly UserManager<User> _userManager;
+        private readonly IConfiguration _config;
 
-        public void AddRoles()
+        public AuthSeeder(RoleManager<IdentityRole> roleManager, UserManager<User> userManager, IConfiguration config)
         {
-            var tAdmin = CreateAdminRole(roleManager);
-            tAdmin.Wait();
-
-            var tUser = CreateUserRole(roleManager);
-            tUser.Wait();
+            _roleManager = roleManager;
+            _userManager = userManager;
+            _config = config;
+        }
+        public async Task AddRoles()
+        {
+            await CreateAdminRole(_roleManager);
+            await CreateUserRole(_roleManager);
         }
         public async Task CreateAdminIfNotExists()
         {
@@ -23,18 +26,28 @@ namespace AskMe.Data.Seeders
             var username = _config["Users:Admin:Username"];
             var password = _config["Users:Admin:Password"];
 
-            var adminInDb = await userManager.FindByEmailAsync(email);
+            var adminInDb = await _userManager.FindByEmailAsync(email);
             if (adminInDb == null)
             {
-                var admin = new User { UserName = username, Email = email };
-                var adminCreated = await userManager.CreateAsync(admin, password);
+                var admin = new User { UserName = username, Email = email, FirstName = "Admin", LastName = "Admin", SubscriptionLevel = 100 };
+                IdentityResult adminCreated = null;
 
-                if (adminCreated.Succeeded)
+                try
                 {
-                    await userManager.AddToRoleAsync(admin, _config["Roles:Admin"]);
+                    adminCreated = await _userManager.CreateAsync(admin, password);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Exception occurred while creating admin: {ex.Message}");
+                }
+
+                if (adminCreated != null && adminCreated.Succeeded)
+                {
+                    await _userManager.AddToRoleAsync(admin, _config["Roles:Admin"]);
                 }
             }
         }
+
 
         private async Task CreateAdminRole(RoleManager<IdentityRole> manager) =>
             await manager.CreateAsync(new IdentityRole(_config["Roles:Admin"]));
