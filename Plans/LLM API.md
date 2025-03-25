@@ -1,9 +1,9 @@
-##Deepseek3
+## Deepseek3
 
-#Link
+# Link
 https://openrouter.ai/deepseek/deepseek-chat-v3-0324:free/api
 
-#fetch
+# fetch
 ```
 fetch("https://openrouter.ai/api/v1/chat/completions", {
   method: "POST",
@@ -25,5 +25,5 @@ fetch("https://openrouter.ai/api/v1/chat/completions", {
 });
 ```
 
-#API key
+# API key
 server/.env
