@@ -1,0 +1,7 @@
+# Ignore test project
+/AskMeTest
+
+# Ignore other unnecessary files
+**/*.md
+**/*.log
+*.git

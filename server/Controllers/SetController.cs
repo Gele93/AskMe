@@ -38,15 +38,15 @@ namespace AskMe.Controllers
         }
 
         [HttpPost("unformated")]
-        public async Task<IActionResult> CreateSetFromUnFormatedTxt(SetRequest setReq)
+        public async Task<IActionResult> CreateSetFromUnFormatedTxt([FromForm] SetRequest setReq)
         {
             if (setReq.file is null) return BadRequest("No file uploaded");
 
             try
             {
-                string userId = "userId";
+                string userId = "0ef31ca1-cdfc-4568-8db8-3fe958564e10";
 
-                var set = await _setService.CreateFormatedSet(setReq, userId);
+                var set = await _setService.CreateUnFormatedSet(setReq, userId);
                 return Ok(set);
             }
             catch (Exception ex)

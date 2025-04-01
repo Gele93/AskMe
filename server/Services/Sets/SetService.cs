@@ -7,6 +7,7 @@ using AskMe.Data.Models.Utils;
 using AskMe.Repositories.Sets;
 using AskMe.Services.Formaters;
 using AskMe.Services.Readers;
+using AskMe.Services.Utilities;
 using System.Runtime.InteropServices;
 
 namespace AskMe.Services.Sets
@@ -33,11 +34,20 @@ namespace AskMe.Services.Sets
 
             var createdSet = await _setRepository.CreateSet(set);
 
-            return ConvertSetToDto(createdSet);
+            return DataConverter.SetToDto(createdSet);
         }
         public async Task<SetDto> CreateUnFormatedSet(SetRequest setReq, string userId)
         {
-            throw new NotImplementedException();
+            var text = await _txtReader.ReadTxtAsString(setReq.file);
+            var formatedText = await _txtFormater.GeneralizeText(text);
+            var lines = await _txtReader.ReadStringByLines(formatedText);
+
+            Set set = new() { Name = setReq.Name, Description = setReq.Description, UserId = userId };
+            await FillSet(set, lines);
+
+            var createdSet = await _setRepository.CreateSet(set);
+
+            return DataConverter.SetToDto(createdSet);
         }
 
         private async Task FillSet(Set set, List<Line> lines)
@@ -66,44 +76,6 @@ namespace AskMe.Services.Sets
                     question.Answers.Add(answer);
                 }
             }
-
         }
-        private SetDto ConvertSetToDto(Set set) => new SetDto
-        {
-            Id = set.Id,
-            Name = set.Name,
-            Description = set.Description,
-            Themes = set.Themes
-            .Select(ConvertThemeToDto)
-            .ToList()
-        };
-
-        private ThemeDto ConvertThemeToDto(Theme theme) => new ThemeDto
-        {
-            Id = theme.Id,
-            Name = theme.Name,
-            Description = theme.Description,
-            SetId = theme.SetId,
-            Questions = theme.Questions
-            .Select(ConvertQuestionToDto)
-            .ToList()
-        };
-
-        private QuestionDto ConvertQuestionToDto(Question question) => new QuestionDto
-        {
-            Id = question.Id,
-            Text = question.Text,
-            ThemeId = question.ThemeId,
-            Answers = question.Answers
-            .Select(ConvertAnswerToDto)
-            .ToList()
-        };
-
-        private AnswerDto ConvertAnswerToDto(Answer answer) => new AnswerDto
-        {
-            Id = answer.Id,
-            Text = answer.Text,
-            QuestionId = answer.QuestionId
-        };
     }
 }

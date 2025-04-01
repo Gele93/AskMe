@@ -1,37 +1,27 @@
-import { useEffect, useState } from 'react'
-import './styles/App.css'
+import { useState } from 'react'
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
+import './App.css'
+import Landing from './pages/Landing'
+import Dashboard from './pages/Dashboard'
+import Sidebar from './components/sidebar'
+import Sets from './pages/Sets'
+import Questions from './pages/Questions'
+import Profile from './pages/Profile'
 
 function App() {
-
-  const upload = async (e: any) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    const formData = new FormData();
-    formData.append("name", "name");
-    formData.append("description", "description");
-    formData.append("file", file);
-
-    try {
-      const response = await fetch("/api/set/formated", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (!response.ok) {
-        console.error("Failed to upload file");
-      } else {
-        console.log("File uploaded successfully");
-      }
-    } catch (error) {
-      console.error("Error uploading file:", error);
-    }
-  };
-
-
   return (
     <div>
-      <input type="file" id="file" name="file" accept=".txt" onChange={(e) => upload(e)} />
+      <Router>
+        <Routes>
+          <Route path='/' element={<Sidebar />} >
+            <Route path="dashboard" element={<Dashboard />} />
+            <Route path="sets" element={<Sets />} />
+            <Route path="questions" element={<Questions />} />
+            <Route path="profile" element={<Profile />} />
+          </Route>
+          <Route path="/home" element={<Landing />} />
+        </Routes>
+      </Router>
     </div>
   )
 }
