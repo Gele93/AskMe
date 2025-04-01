@@ -30,6 +30,13 @@ namespace AskMe
                 connectionString = configurations["ConnectionString"];
             }
 
+            builder.Services.AddControllers()
+                            .AddJsonOptions(options =>
+                                 {
+                                     options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
+                                 });
+
+
             AddServices(builder);
             AddDatabase(builder, connectionString);
             AddAuthentication(builder, configurations);
@@ -74,24 +81,27 @@ namespace AskMe
             builder.Services.AddScoped<ITxtReader, TxtReader>();
             builder.Services.AddScoped<ISetService, SetService>();
             builder.Services.AddScoped<ISetRepository, SetRepository>();
+            builder.Services.AddScoped<UserManager<User>>();
+            builder.Services.AddScoped<RoleManager<IdentityRole>>();
 
         }
 
 
         static async Task SeedRolesAndAdminAsync(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, WebApplication app, IConfiguration config)
         {
-            if (!await roleManager.RoleExistsAsync(config["Roles:Admin"]))
+            var adminRole = config["Roles:Admin"];
+            if (!await roleManager.RoleExistsAsync(adminRole))
             {
                 using var scope = app.Services.CreateScope();
                 var authenticationSeeder = scope.ServiceProvider.GetRequiredService<AuthSeeder>();
-                authenticationSeeder.AddRoles();
+                await authenticationSeeder.AddRoles();
             }
-            var adminUser = await userManager.FindByEmailAsync(config["Users:Admin:email"]);
+            var adminUser = await userManager.FindByEmailAsync(config["Users:Admin:Email"]);
             if (adminUser == null)
             {
                 using var scope = app.Services.CreateScope();
                 var authenticationSeeder = scope.ServiceProvider.GetRequiredService<AuthSeeder>();
-                authenticationSeeder.CreateAdminIfNotExists();
+                await authenticationSeeder.CreateAdminIfNotExists();
             }
         }
 
@@ -99,7 +109,6 @@ namespace AskMe
         {
             builder.Services.AddDbContext<AskMeContext>(options =>
             {
-                Console.WriteLine($"CONNECTION STRING:  {connectionString}");
                 options.UseSqlServer(
                     connectionString,
                     sqlOptions => sqlOptions.EnableRetryOnFailure(
