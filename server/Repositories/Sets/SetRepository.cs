@@ -1,5 +1,6 @@
 ﻿using AskMe.Data.Context;
 using AskMe.Data.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace AskMe.Repositories.Sets
 {
@@ -17,5 +18,14 @@ namespace AskMe.Repositories.Sets
             await _context.SaveChangesAsync();
             return set;
         }
+
+        public async Task<List<Set>> GetAll(string userId) => await _context.Sets
+            .Where(s => s.UserId == userId)
+            .Include(s => s.Themes)
+                .ThenInclude(t => t.Questions)
+                    .ThenInclude(q => q.Answers)
+            .ToListAsync();
+
+
     }
 }

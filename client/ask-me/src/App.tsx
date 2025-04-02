@@ -7,6 +7,8 @@ import Sidebar from './components/sidebar'
 import Sets from './pages/Sets'
 import Questions from './pages/Questions'
 import Profile from './pages/Profile'
+import ProtectedRoute from './utils/ProtectedRoute'
+import CreateSet from './pages/CreateSet'
 
 function App() {
   return (
@@ -14,10 +16,42 @@ function App() {
       <Router>
         <Routes>
           <Route path='/' element={<Sidebar />} >
-            <Route path="dashboard" element={<Dashboard />} />
-            <Route path="sets" element={<Sets />} />
-            <Route path="questions" element={<Questions />} />
-            <Route path="profile" element={<Profile />} />
+            <Route
+              path="dashboard"
+              element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              } />
+            <Route
+              path="sets"
+              element={
+                <ProtectedRoute>
+                  <Sets />
+                </ProtectedRoute>
+              } />
+            <Route
+              path="questions"
+              element={
+                <ProtectedRoute>
+                  <Questions />
+                </ProtectedRoute>
+              } />
+            <Route
+              path="profile"
+              element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              } />
+            <Route
+              path="sets/create"
+              element={
+                <ProtectedRoute>
+                  <CreateSet />
+                </ProtectedRoute>
+              } />
+
           </Route>
           <Route path="/home" element={<Landing />} />
         </Routes>

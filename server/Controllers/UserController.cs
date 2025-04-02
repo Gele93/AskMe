@@ -2,8 +2,10 @@
 using AskMe.Data.Models.UserModels;
 using AskMe.Services.UserServices;
 using Azure.Core;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace AskMe.Controllers
 {
@@ -81,10 +83,21 @@ namespace AskMe.Controllers
         }
 
         [HttpPost("logout")]
-        public IActionResult Logout()
+        public async Task<IActionResult> Logout()
         {
             Response.Cookies.Delete("AuthToken");
             return Ok("Logged out successfully");
+        }
+
+        [Authorize]
+        [HttpPost("authorize")]
+        public async Task<IActionResult> Authorize()
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (userId is null) return Unauthorized();
+
+            return Ok("Valid user authorized.");
         }
 
         private void AddErrors(AuthResult result)

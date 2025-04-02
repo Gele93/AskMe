@@ -7,5 +7,6 @@ namespace AskMe.Services.Sets
     {
         Task<SetDto> CreateFormatedSet(SetRequest file, string userId);
         Task<SetDto> CreateUnFormatedSet(SetRequest file, string userId);
+        Task<List<SetDto>> GetAll(string userId);
     }
 }

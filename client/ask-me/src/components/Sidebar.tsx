@@ -6,11 +6,16 @@ import { BsQuestionCircle } from "react-icons/bs";
 import { FaSitemap } from "react-icons/fa";
 import { CgProfile } from "react-icons/cg";
 import { IoSettingsOutline } from "react-icons/io5";
-
+import { fetchLogoutUser } from '../scripts/scripts';
 
 function Sidebar() {
 
     const [isMenuHovered, setIsMenuHovered] = useState(false)
+
+    const handleLogout = async () => {
+        await fetchLogoutUser()
+        localStorage.setItem("user", "")
+    }
 
     return (
         <div className="grid grid-rows-[100vh]"
@@ -53,7 +58,7 @@ function Sidebar() {
                         <p className='flex-1/2'>Profile</p>
                     }
                 </Link>
-                <Link className="flex justify-around overflow-hidden h-10 m-2 rounded-lg items-center hover:bg-accent" to="/profile">
+                <Link className="flex justify-around overflow-hidden h-10 m-2 rounded-lg items-center hover:bg-accent" to="/settings">
                     <div className='flex-1/2 flex justify-start'>
                         <IoSettingsOutline />
                     </div>
@@ -61,7 +66,8 @@ function Sidebar() {
                         <p className='flex-1/2'>Settings</p>
                     }
                 </Link>
-                <Link className="flex justify-around overflow-hidden h-10 m-2 rounded-lg items-center hover:bg-accent" to="/profile">
+                <Link className="flex justify-around overflow-hidden h-10 m-2 rounded-lg items-center hover:bg-accent" to="/home"
+                    onClick={() => handleLogout()}>
                     <div className='flex-1/2 flex justify-start'>
                         <CiLogout />
                     </div>

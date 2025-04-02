@@ -12,7 +12,7 @@ using System.Runtime.InteropServices;
 
 namespace AskMe.Services.Sets
 {
-    public class SetService : ISetService 
+    public class SetService : ISetService
     {
         private readonly ITxtReader _txtReader;
         private readonly ITxtFormater _txtFormater;
@@ -34,7 +34,7 @@ namespace AskMe.Services.Sets
 
             var createdSet = await _setRepository.CreateSet(set);
 
-            return DataConverter.SetToDto(createdSet); 
+            return DataConverter.SetToDto(createdSet);
         }
         public async Task<SetDto> CreateUnFormatedSet(SetRequest setReq, string userId)
         {
@@ -49,6 +49,21 @@ namespace AskMe.Services.Sets
 
             return DataConverter.SetToDto(createdSet);
         }
+
+        public async Task<List<SetDto>> GetAll(string userId)
+        {
+            var sets = await _setRepository.GetAll(userId);
+
+            List<SetDto> setDtos = new();
+
+            foreach (var set in sets)
+            {
+                setDtos.Add(DataConverter.SetToDto(set));
+            }
+
+            return setDtos;
+        }
+
 
         private async Task FillSet(Set set, List<Line> lines)
         {

@@ -3,6 +3,9 @@ using AskMe.Services.Formaters;
 using AskMe.Services.Readers;
 using AskMe.Services.Sets;
 using AskMe.Data.Models.Sets;
+using Microsoft.AspNetCore.Authorization;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace AskMe.Controllers
 {
@@ -25,7 +28,9 @@ namespace AskMe.Controllers
 
             try
             {
-                string userId = "0ef31ca1-cdfc-4568-8db8-3fe958564e10";
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                if (userId is null) return Unauthorized();
 
                 var set = await _setService.CreateFormatedSet(setReq, userId);
                 return Ok(set);
@@ -44,7 +49,9 @@ namespace AskMe.Controllers
 
             try
             {
-                string userId = "0ef31ca1-cdfc-4568-8db8-3fe958564e10";
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                if (userId is null) return Unauthorized();
 
                 var set = await _setService.CreateUnFormatedSet(setReq, userId);
                 return Ok(set);
@@ -53,6 +60,26 @@ namespace AskMe.Controllers
             {
                 _logger.LogError(ex.Message);
                 return StatusCode(500, "Uploading file went wrong.");
+            }
+        }
+
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (userId is null) return Unauthorized();
+
+            try
+            {
+                var sets = await _setService.GetAll(userId);
+                return Ok(sets);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error while getting sets {ex.Message}");
+                return StatusCode(500, "Error while getting sets");
             }
         }
 
