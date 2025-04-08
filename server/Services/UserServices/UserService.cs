@@ -11,7 +11,7 @@ namespace AskMe.Services.UserServices
         private ITokenService _tokenService;
 
 
-        public async Task<AuthResult> RegisterAsync(UserDto userDto)
+        public async Task<AuthResult> RegisterAsync(CreateUserDto userDto)
         {
             var user = new User
             {
@@ -33,12 +33,12 @@ namespace AskMe.Services.UserServices
         }
         public async Task<AuthResult> LoginAsync(string email, string password)
         {
-            var managedUser = await userManager.FindByEmailAsync(email);
+            var managedUser = await _userManager.FindByEmailAsync(email);
 
             if (managedUser == null)
                 return InvalidEmail(email);
 
-            var isPasswordValid = await userManager.CheckPasswordAsync(managedUser, password);
+            var isPasswordValid = await _userManager.CheckPasswordAsync(managedUser, password);
 
             if (!isPasswordValid)
                 return InvalidPassword(email, managedUser.UserName);
@@ -47,6 +47,15 @@ namespace AskMe.Services.UserServices
             var accessToken = tokenService.CreateToken(managedUser, roles[0]);
 
             return new AuthResult(true, managedUser.Email, managedUser.UserName, accessToken, managedUser.Id);
+        }
+
+        public async Task<UserDto> GetUser(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+                throw new Exception("User not found");
+
+            return new UserDto(user.FirstName, user.LastName, user.SubscriptionLevel, user.Email, user.UserName);
         }
 
         private static AuthResult InvalidEmail(string email)

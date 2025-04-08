@@ -34,8 +34,9 @@ namespace AskMe
                             .AddJsonOptions(options =>
                                  {
                                      options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
-                                 });
+                                     options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
 
+                                 });
 
             AddServices(builder);
             AddDatabase(builder, connectionString);
@@ -85,6 +86,7 @@ namespace AskMe
             builder.Services.AddScoped<RoleManager<IdentityRole>>();
 
         }
+
 
 
         static async Task SeedRolesAndAdminAsync(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, WebApplication app, IConfiguration config)

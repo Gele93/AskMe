@@ -42,5 +42,6 @@ namespace AskMe.Services.Utilities
             Text = answer.Text,
             QuestionId = answer.QuestionId
         };
+
     }
 }

@@ -2,8 +2,10 @@
 using AskMe.Data.Models.UserModels;
 using AskMe.Services.UserServices;
 using Azure.Core;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace AskMe.Controllers
 {
@@ -21,7 +23,7 @@ namespace AskMe.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<ActionResult<AuthResponse>> Register(UserDto regRequest)
+        public async Task<ActionResult<AuthResponse>> Register(CreateUserDto regRequest)
         {
             try
             {
@@ -49,30 +51,53 @@ namespace AskMe.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] AuthRequest request)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            var result = await _userService.LoginAsync(request.Email, request.Password);
-
-            var cookieOptions = new CookieOptions
+            try
             {
-                Expires = DateTime.UtcNow.AddHours(1)
-            };
 
-            Response.Cookies.Append("AuthToken", result.Token, cookieOptions);
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
 
-            if (result.Success)
-                return Ok();
+                var result = await _userService.LoginAsync(request.Email, request.Password);
 
-            AddErrors(result);
-            return BadRequest(ModelState);
+                var cookieOptions = new CookieOptions
+                {
+                    Expires = DateTime.UtcNow.AddHours(1)
+                };
+
+                Response.Cookies.Append("AuthToken", result.Token, cookieOptions);
+
+                if (result.Success)
+                {
+                    var user = await _userService.GetUser(result.UserId);
+                    return Ok(user);
+                }
+
+                AddErrors(result);
+                return BadRequest(ModelState);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"An error occured while logging in: {ex.Message}");
+                return StatusCode(500, "Login failed.");
+            }
         }
 
         [HttpPost("logout")]
-        public IActionResult Logout()
+        public async Task<IActionResult> Logout()
         {
             Response.Cookies.Delete("AuthToken");
             return Ok("Logged out successfully");
+        }
+
+        [Authorize]
+        [HttpPost("authorize")]
+        public async Task<IActionResult> Authorize()
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (userId is null) return Unauthorized();
+
+            return Ok("Valid user authorized.");
         }
 
         private void AddErrors(AuthResult result)
