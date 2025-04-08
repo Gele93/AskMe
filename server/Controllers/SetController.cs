@@ -6,6 +6,7 @@ using AskMe.Data.Models.Sets;
 using Microsoft.AspNetCore.Authorization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using Microsoft.AspNetCore.DataProtection;
 
 namespace AskMe.Controllers
 {
@@ -21,8 +22,8 @@ namespace AskMe.Controllers
             _setService = setService;
         }
 
-        [HttpPost("formated")]
-        public async Task<IActionResult> CreateSetFromFormatedTxt([FromForm] SetRequest setReq)
+        [HttpPost("formated/preview")]
+        public async Task<IActionResult> CreateSetPreviewFromFormatedTxt([FromForm] SetRequest setReq)
         {
             if (setReq.file is null) return BadRequest("No file uploaded");
 
@@ -32,7 +33,7 @@ namespace AskMe.Controllers
 
                 if (userId is null) return Unauthorized();
 
-                var set = await _setService.CreateFormatedSet(setReq, userId);
+                var set = await _setService.CreateFormatedSetPreview(setReq, userId);
                 return Ok(set);
             }
             catch (Exception ex)
@@ -42,8 +43,8 @@ namespace AskMe.Controllers
             }
         }
 
-        [HttpPost("unformated")]
-        public async Task<IActionResult> CreateSetFromUnFormatedTxt([FromForm] SetRequest setReq)
+        [HttpPost("unformated/preview")]
+        public async Task<IActionResult> CreateSetPreviewFromUnFormatedTxt([FromForm] SetRequest setReq)
         {
             if (setReq.file is null) return BadRequest("No file uploaded");
 
@@ -53,15 +54,36 @@ namespace AskMe.Controllers
 
                 if (userId is null) return Unauthorized();
 
-                var set = await _setService.CreateUnFormatedSet(setReq, userId);
+                var set = await _setService.CreateUnFormatedSetPreview(setReq, userId);
                 return Ok(set);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.Message);
+                _logger.LogError($"Error while creating unformated preview: {ex.Message}");
                 return StatusCode(500, "Uploading file went wrong.");
             }
         }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> CreateSet(SetDto setData)
+        {
+            try
+            {
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (userId is null) return Unauthorized();
+
+                await _setService.CreateSet(setData, userId);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error while saving or creating set {ex.Message}");
+                return StatusCode(500, "Uploading file went wrong.");
+            }
+        }
+
 
         [Authorize]
         [HttpGet]

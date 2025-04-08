@@ -48,3 +48,9 @@ export interface Answer {
     text: string;
     questionId: number;
 }
+
+export enum CreateStage {
+    Tool,
+    Details,
+    Preview
+}

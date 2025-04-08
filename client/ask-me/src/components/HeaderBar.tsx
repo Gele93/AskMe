@@ -1,7 +1,7 @@
 import React from 'react'
 import { CgProfile } from "react-icons/cg";
-import ActionButton from './ActionButton';
-import { IoIosAddCircle } from "react-icons/io";
+import { FaPlayCircle } from "react-icons/fa";
+
 
 
 function HeaderBar({ title, username }: { title: string, username: string | undefined }) {
@@ -17,7 +17,7 @@ function HeaderBar({ title, username }: { title: string, username: string | unde
       </div>
       <div className='flex items-center grow-[0.8] justify-center'>
         <button>
-          <IoIosAddCircle className="cursor-pointer hover:text-accent text-3xl" />
+          <FaPlayCircle className="cursor-pointer hover:text-accent text-3xl" />
         </button>
       </div>
       <div className='flex justify-center items-center'>

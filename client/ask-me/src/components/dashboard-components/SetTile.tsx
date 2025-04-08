@@ -13,7 +13,7 @@ function SetTile({ title, description, themes }: { title: string, description: s
       onMouseLeave={() => setIsHovered(false)}>
       {isHovered ?
         <div className='flex flex-col text-[0.8rem] overflow-auto basic-scrollbar px-5'>
-          <p className='text-[1.2rem] fixed'>Themes</p>
+          <p className='text-[1.2rem] sticky top-0 left-0 z-10'>Themes</p>
           {themes.map(t => (
             <p key={t.id} className='ml-auto'>{t.name}</p>
           ))}

@@ -1,15 +1,15 @@
 import { CreateUserDto, LoginUserDto, Set, User } from "../types/types";
 
-export const handleSetSubmit = async (event: any) => {
-    event.preventDefault();
+const api = "/api"
 
+export const fetchCreateSetPreview = async (name: string, description: string, file: any | null, isFormated: boolean | null): Promise<Set> => {
     const formData = new FormData();
-    formData.append('file', event.target.files[0]);
-    formData.append('name', "name");
-    formData.append('description', "description");
+    formData.append('file', file);
+    formData.append('name', name);
+    formData.append('description', description);
 
     try {
-        const response = await fetch('/api/set/unformated', {
+        const response = await fetch(`${api}/set/${isFormated ? "formated" : "unformated"}/preview`, {
             method: 'POST',
             body: formData,
         });
@@ -18,16 +18,43 @@ export const handleSetSubmit = async (event: any) => {
             throw new Error('Failed to submit form');
         }
 
-        const result = await response.json();
+        const result: Set = await response.json();
         console.log('Success:', result);
+        return result
     } catch (error) {
         console.error('Error:', error);
+        throw new Error("failed to create set preview")
     }
 };
 
+export const fetchCreateSet = async (set: Set): Promise<boolean> => {
+    try {
+        const response = await fetch(`${api}/set`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(set),
+        });
+
+        if (!response.ok) {
+            console.error('Failed to create set');
+            return false
+        }
+        return true
+
+    } catch (error) {
+        console.error('Error creating set:', error);
+        return false
+    }
+}
+
+
 export const fetchRegisterUser = async (user: CreateUserDto) => {
     try {
-        const response = await fetch('/api/user/register', {
+        console.log(api)
+        const response = await fetch(`${api}/user/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -46,7 +73,7 @@ export const fetchRegisterUser = async (user: CreateUserDto) => {
 
 export const fetchLoginUser = async (user: LoginUserDto): Promise<User> => {
     try {
-        const response = await fetch('/api/user/login', {
+        const response = await fetch(`${api}/user/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -67,7 +94,7 @@ export const fetchLoginUser = async (user: LoginUserDto): Promise<User> => {
 
 export const fetchLogoutUser = async () => {
     try {
-        const response = await fetch('/api/user/login', {
+        const response = await fetch(`${api}/user/login`, {
             method: 'POST',
         });
 
@@ -81,7 +108,7 @@ export const fetchLogoutUser = async () => {
 
 export const fetchGetSets = async (): Promise<Set[]> => {
     try {
-        const response = await fetch('/api/set', {
+        const response = await fetch(`${api}set`, {
             method: 'GET',
             credentials: 'include',
         });
@@ -129,7 +156,7 @@ export const shortenTitle = (title: string, maxLength: number) => {
 
 export const checkAuthorization = async (): Promise<boolean> => {
     try {
-        const response = await fetch('/api/user/authorize', {
+        const response = await fetch(`${api}/user/authorize`, {
             method: 'POST',
             credentials: 'include',
         });

@@ -88,6 +88,7 @@ namespace AskMe
         }
 
 
+
         static async Task SeedRolesAndAdminAsync(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, WebApplication app, IConfiguration config)
         {
             var adminRole = config["Roles:Admin"];

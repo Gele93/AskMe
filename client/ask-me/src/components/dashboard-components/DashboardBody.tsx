@@ -55,9 +55,11 @@ function DashboardBody({ sets }: { sets: Set[] | null }) {
                 <div className='border-b-1  w-[80%] mx-auto h-[0vh]'></div>
                 <section className='flex flex-wrap gap-10 w-[90%] mx-auto'>
                     {
-                        sets && sets.map(s => (
+                        sets ? sets.map(s => (
                             <SetTile key={s.id} title={s.name} description={s.description} themes={s.themes} />
                         ))
+                            :
+                            <div className='set-tile-loader'></div>
                     }
                 </section>
             </div>
