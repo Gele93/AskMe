@@ -6,7 +6,7 @@ import { FaPlayCircle } from "react-icons/fa";
 
 function HeaderBar({ title, username }: { title: string, username: string | undefined }) {
 
-  const handleAdd = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handlePlay = (e: React.MouseEvent<HTMLButtonElement>) => {
 
   }
 

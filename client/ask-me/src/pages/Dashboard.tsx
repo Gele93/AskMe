@@ -5,7 +5,7 @@ import { useState } from 'react'
 import { User, Set } from '../types/types'
 import { fetchGetSets } from '../scripts/scripts'
 
-function Dashboard() {
+function Dashboard({ useInfoToast }: { useInfoToast: any }) {
 
     const [user, setUser] = useState<User | null>(null)
     const [sets, setSets] = useState<Set[] | null>(null)
@@ -29,7 +29,7 @@ function Dashboard() {
     return (
         <div>
             <HeaderBar title={"Dashboard"} username={user?.username} />
-            <DashboardBody sets={sets} />
+            <DashboardBody sets={sets} setSets={setSets} useInfoToast={useInfoToast} />
         </div>
     )
 }

@@ -54,3 +54,16 @@ export enum CreateStage {
     Details,
     Preview
 }
+
+export enum ToastType {
+    Info,
+    Ok,
+    Fail
+}
+
+export enum ActionType {
+    Create,
+    Edit,
+    Delete,
+    Neutral
+}

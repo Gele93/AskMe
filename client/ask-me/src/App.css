@@ -9,6 +9,9 @@
     --color-secondary-50: #EEF1DA80; 
     --color-background-50: #C7D9DD80;
     --color-accent-50: #ADB2D480;
+    --color-success: #5E946A; 
+    --color-fail: #C56A64;
+    --color-warning: #D99A4E;
 
     /*#eaf2ea*/
 }

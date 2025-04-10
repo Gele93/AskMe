@@ -1,4 +1,4 @@
-import { CreateUserDto, LoginUserDto, Set, User } from "../types/types";
+import { CreateUserDto, LoginUserDto, Set, Theme, User } from "../types/types";
 
 const api = "/api"
 
@@ -168,6 +168,64 @@ export const checkAuthorization = async (): Promise<boolean> => {
         return true;
     } catch (error) {
         console.error('Error checking authorization:', error);
+        return false;
+    }
+};
+
+export const fetchDeleteSet = async (setId: number): Promise<boolean> => {
+    try {
+        const response = await fetch(`${api}/set/${setId}`, {
+            method: 'DELETE',
+            credentials: 'include',
+        });
+
+        if (!response.ok) {
+            console.error('Failed to delete set');
+            return false;
+        }
+        return true;
+    } catch (error) {
+        console.error('Error deleting set:', error);
+        return false;
+    }
+};
+
+export const fetchUpdateTheme = async (theme: Theme): Promise<boolean> => {
+    try {
+        const response = await fetch(`${api}/theme`, {
+            method: 'PATCH',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(theme),
+        });
+
+        if (!response.ok) {
+            console.error('Failed to update theme');
+            return false;
+        }
+        return true;
+    } catch (error) {
+        console.error('Error updating theme:', error);
+        return false;
+    }
+};
+
+export const fetchDeleteTheme = async (themeId: number): Promise<boolean> => {
+    try {
+        const response = await fetch(`${api}/theme/${themeId}`, {
+            method: 'DELETE',
+            credentials: 'include',
+        });
+
+        if (!response.ok) {
+            console.error('Failed to delete theme');
+            return false;
+        }
+        return true;
+    } catch (error) {
+        console.error('Error deleting theme:', error);
         return false;
     }
 };
