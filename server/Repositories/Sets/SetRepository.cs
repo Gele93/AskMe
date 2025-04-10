@@ -26,6 +26,24 @@ namespace AskMe.Repositories.Sets
                     .ThenInclude(q => q.Answers)
             .ToListAsync();
 
+        public async Task<Set> GetById(int id)
+        {
+            var set = await _context.Sets
+                .Include(s => s.Themes)
+                    .ThenInclude(t => t.Questions)
+                        .ThenInclude(q => q.Answers)
+                .FirstOrDefaultAsync(s => s.Id == id);
 
+            if (set is null) throw new Exception("Set not found");
+            return set;
+        }
+
+        public Task DeleteById(int id)
+        {
+            var set = _context.Sets.FirstOrDefault(s => s.Id == id);
+            if (set is null) throw new Exception("Set not found");
+            _context.Sets.Remove(set);
+            return _context.SaveChangesAsync();
+        }
     }
 }

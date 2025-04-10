@@ -40,8 +40,6 @@ namespace AskMe.Services.Sets
             };
             await FillSetFromLines(set, lines);
 
-            //  var createdSet = await _setRepository.CreateSet(set);
-
             return DataConverter.SetToDto(set);
         }
         public async Task<SetDto> CreateUnFormatedSetPreview(SetRequest setReq, string userId)
@@ -60,8 +58,6 @@ namespace AskMe.Services.Sets
                 UserId = userId
             };
             await FillSetFromLines(set, lines);
-
-            //    var createdSet = await _setRepository.CreateSet(set);
 
             return DataConverter.SetToDto(set);
         }
@@ -94,6 +90,18 @@ namespace AskMe.Services.Sets
             return setDtos;
         }
 
+        public async Task DeleteById(int setId)
+        {
+            try
+            {
+                await _setRepository.DeleteById(setId);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error while deleting set {setId}: {ex.Message}");
+                throw;
+            }
+        }
 
         private async Task FillSetFromLines(Set set, List<Line> lines)
         {
@@ -122,7 +130,6 @@ namespace AskMe.Services.Sets
                 }
             }
         }
-
         private async Task FillSetFromDto(SetDto setData, Set set)
         {
             foreach (var theme in setData.Themes)

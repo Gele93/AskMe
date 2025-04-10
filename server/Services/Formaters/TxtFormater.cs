@@ -9,7 +9,7 @@ namespace AskMe.Services.Formaters
     {
         private readonly ILogger<TxtFormater> _logger;
         private readonly string _apiKey = "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";
-        private readonly string _apiKey2 = "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";
+        private readonly string _apiKey2 = "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";
 
         public TxtFormater(ILogger<TxtFormater> logger)
         {
