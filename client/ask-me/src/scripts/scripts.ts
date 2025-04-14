@@ -51,7 +51,7 @@ export const fetchCreateSet = async (set: Set): Promise<boolean> => {
 }
 
 
-export const fetchRegisterUser = async (user: CreateUserDto) => {
+export const fetchRegisterUser = async (user: CreateUserDto): Promise<boolean> => {
     try {
         console.log(api)
         const response = await fetch(`${api}/user/register`, {
@@ -63,11 +63,13 @@ export const fetchRegisterUser = async (user: CreateUserDto) => {
         });
 
         if (!response.ok) {
-            throw new Error('Failed to register user');
+            console.error('Failed to register user');
+            return false
         }
-        console.log('User registered successfully:');
+        return true
     } catch (error) {
         console.error('Error registering user:', error);
+        return false
     }
 }
 
@@ -94,7 +96,7 @@ export const fetchLoginUser = async (user: LoginUserDto): Promise<User> => {
 
 export const fetchLogoutUser = async () => {
     try {
-        const response = await fetch(`${api}/user/login`, {
+        const response = await fetch(`${api}/user/logout`, {
             method: 'POST',
         });
 

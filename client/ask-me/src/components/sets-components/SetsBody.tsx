@@ -7,7 +7,8 @@ import SetsTable from './SetsTable';
 import ModalWraper from '../utilities/ModalWraper';
 
 
-function SetsBody({ sets, setSets, useInfoToast }: { sets: Set[] | null, setSets: Dispatch<SetStateAction<Set[] | null>>, useInfoToast: any }) {
+function SetsBody({ sets, setSets, useInfoToast, openLearnThisPreset }:
+    { sets: Set[] | null, setSets: Dispatch<SetStateAction<Set[] | null>>, useInfoToast: any, openLearnThisPreset: (set: Set | null) => void }) {
 
     const [editSet, setEditSet] = useState<Set | null>(null)
 
@@ -16,7 +17,9 @@ function SetsBody({ sets, setSets, useInfoToast }: { sets: Set[] | null, setSets
             <SetsTable sets={sets} setEditSet={setEditSet} />
             {editSet !== null &&
                 <ModalWraper>
-                    <EditSet set={editSet} sets={sets} setSets={setSets} setEditSet={setEditSet} height='60vh' showDetails={true} useInfoToast={useInfoToast} />
+                    <EditSet
+                        set={editSet} sets={sets} setSets={setSets} setEditSet={setEditSet}
+                        height='60vh' showDetails={true} useInfoToast={useInfoToast} openLearnThisPreset={openLearnThisPreset} />
                 </ModalWraper>
             }
         </>

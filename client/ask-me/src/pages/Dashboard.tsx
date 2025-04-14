@@ -1,22 +1,13 @@
-import React, { useEffect } from 'react'
+import React, { Dispatch, SetStateAction, useEffect } from 'react'
 import HeaderBar from '../components/HeaderBar'
 import DashboardBody from '../components/dashboard-components/DashboardBody'
 import { useState } from 'react'
 import { User, Set } from '../types/types'
 import { fetchGetSets } from '../scripts/scripts'
 
-function Dashboard({ useInfoToast }: { useInfoToast: any }) {
+function Dashboard({ useInfoToast, openLearnThisPreset, user }: { useInfoToast: any, openLearnThisPreset: (set: Set | null) => void, user: User | null }) {
 
-    const [user, setUser] = useState<User | null>(null)
     const [sets, setSets] = useState<Set[] | null>(null)
-
-    useEffect(() => {
-        const userData: string | null = localStorage.getItem("user")
-        if (userData) {
-            const curUser: User = JSON.parse(userData)
-            setUser(curUser)
-        }
-    }, [])
 
     useEffect(() => {
         const getSets = async () => {
@@ -28,8 +19,8 @@ function Dashboard({ useInfoToast }: { useInfoToast: any }) {
 
     return (
         <div>
-            <HeaderBar title={"Dashboard"} username={user?.username} />
-            <DashboardBody sets={sets} setSets={setSets} useInfoToast={useInfoToast} />
+            <HeaderBar title={"Dashboard"} username={user?.username} openLearnThisPreset={openLearnThisPreset} />
+            <DashboardBody sets={sets} setSets={setSets} useInfoToast={useInfoToast} openLearnThisPreset={openLearnThisPreset} />
         </div>
     )
 }

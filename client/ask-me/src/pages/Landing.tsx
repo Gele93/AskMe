@@ -1,11 +1,24 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import LoginPanel from '../components/landing-components/LoginPanel'
 import RegisterPanel from '../components/landing-components/RegisterPanel'
 import LandingBanner from '../components/landing-components/LandingBanner'
+import { checkAuthorization } from '../scripts/scripts'
+import { useNavigate } from 'react-router-dom'
 
-function Landing() {
+function Landing({ useInfoToast }: { useInfoToast: any }) {
 
-    const [isLogin, setIsLogin] = useState(false)
+    const [isLogin, setIsLogin] = useState<boolean>(false)
+    const navigate = useNavigate()
+
+
+    useEffect(() => {
+        const verifyAuth = async () => {
+            const result = await checkAuthorization()
+            console.log(result)
+            if (result) navigate("/dashboard")
+        };
+        verifyAuth();
+    }, [navigate]);
 
     return (
         <div className='bg-[#eaf2ea] w-full h-[100vh] grid grid-rows-[10vh_90vh]'>
@@ -18,16 +31,18 @@ function Landing() {
                     {isLogin ?
                         <LoginPanel />
                         :
-                        <section className='bg-accent rounded-l-4xl flex items-center justify-center'>
-                            <button className='text-3xl text-secondary cursor-pointer' onClick={() => setIsLogin(!isLogin)}>Login</button>
+                        <section className='bg-accent rounded-l-4xl flex items-center justify-center cursor-pointer'
+                            onClick={() => setIsLogin(!isLogin)}>
+                            <button className='text-3xl text-secondary'>Login</button>
                         </section>
                     }
                     {isLogin ?
-                        <section className='bg-accent rounded-r-4xl flex items-center justify-center'>
-                            <button className='text-3xl text-secondary cursor-pointer' onClick={() => setIsLogin(!isLogin)}>Register</button>
+                        <section className='bg-accent rounded-r-4xl flex items-center justify-center cursor-pointer'
+                            onClick={() => setIsLogin(!isLogin)}>
+                            <button className='text-3xl text-secondary' >Register</button>
                         </section>
                         :
-                        <RegisterPanel />
+                        <RegisterPanel useInfoToast={useInfoToast} setIsLogin={setIsLogin} />
                     }
 
                 </section>

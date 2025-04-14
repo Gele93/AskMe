@@ -28,12 +28,28 @@ export interface Set {
     themes: Theme[];
 }
 
+export interface SetToLearn {
+    id: number;
+    name: string;
+    description: string;
+    themes: ThemeWithPriority[];
+}
+
 export interface Theme {
     id: number;
     name: string;
     description: string;
     setId: number;
     questions: Question[];
+}
+
+export interface ThemeWithPriority {
+    id: number;
+    name: string;
+    description: string;
+    setId: number;
+    questions: Question[];
+    priority: Priority;
 }
 
 export interface Question {
@@ -66,4 +82,15 @@ export enum ActionType {
     Edit,
     Delete,
     Neutral
+}
+
+export enum Priority {
+    Low,
+    Normal,
+    High
+}
+
+export interface LearnSetup {
+    questions: number
+    goal: number
 }

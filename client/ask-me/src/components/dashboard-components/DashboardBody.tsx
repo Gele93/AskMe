@@ -9,7 +9,8 @@ import { useNavigate } from 'react-router-dom';
 import SetModal from './SetModal';
 import { SetStateAction } from 'react';
 
-function DashboardBody({ sets, setSets, useInfoToast }: { sets: Set[] | null, setSets: Dispatch<SetStateAction<Set[] | null>>, useInfoToast: any }) {
+function DashboardBody({ sets, setSets, useInfoToast, openLearnThisPreset }:
+    { sets: Set[] | null, setSets: Dispatch<SetStateAction<Set[] | null>>, useInfoToast: any, openLearnThisPreset: (set: Set | null) => void }) {
 
     const [clickedSet, setClickedSet] = useState<Set | null>(null)
 
@@ -71,7 +72,7 @@ function DashboardBody({ sets, setSets, useInfoToast }: { sets: Set[] | null, se
                 <SideBanner />
             </div>
             {clickedSet !== null &&
-                <SetModal set={clickedSet} setClickedSet={setClickedSet} useInfoToast={useInfoToast} setSets={setSets} sets={sets} />
+                <SetModal set={clickedSet} setClickedSet={setClickedSet} useInfoToast={useInfoToast} setSets={setSets} sets={sets} openLearnThisPreset={openLearnThisPreset} />
             }
 
         </>

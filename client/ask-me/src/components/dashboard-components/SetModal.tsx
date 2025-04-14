@@ -10,7 +10,14 @@ import ModalWraper from '../utilities/ModalWraper';
 import { fetchDeleteSet } from '../../scripts/scripts';
 import { ToastType } from '../../types/types';
 
-function SetModal({ set, sets, setSets, setClickedSet, useInfoToast }: { set: Set, sets: Set[] | null, setSets: Dispatch<SetStateAction<Set[] | null>>, setClickedSet: Dispatch<SetStateAction<Set | null>>, useInfoToast: any }) {
+function SetModal({ set, sets, setSets, setClickedSet, useInfoToast, openLearnThisPreset }:
+    {
+        set: Set,
+        sets: Set[] | null, setSets: Dispatch<SetStateAction<Set[] | null>>,
+        setClickedSet: Dispatch<SetStateAction<Set | null>>,
+        useInfoToast: any,
+        openLearnThisPreset: (set: Set | null) => void
+    }) {
 
     const [isDeleteModal, setIsDeleteModal] = useState<boolean>(false)
 
@@ -36,7 +43,7 @@ function SetModal({ set, sets, setSets, setClickedSet, useInfoToast }: { set: Se
     }
 
     const learnThis = () => {
-        console.log("learn")
+        openLearnThisPreset(set)
     }
 
     const [isDetailedView, setIsDetailedView] = useState<boolean>(true)
@@ -54,9 +61,13 @@ function SetModal({ set, sets, setSets, setClickedSet, useInfoToast }: { set: Se
                 </div>
                 <SetPreview set={set} height='55vh' showDetails={isDetailedView} />
                 <div className='flex justify-evenly w-full'>
-                    <ActionButton text={"Edit"} action={learnThis} actionType={ActionType.Edit} />
-                    <BigActionButton text={"Learn this!"} action={learnThis} />
-                    <ActionButton text={"Delete"} action={handleDelete} actionType={ActionType.Delete} />
+                    <button
+                        className='h-10 w-[80%] text-xl rounded-2xl bg-secondary hover:bg-accent cursor-pointer border-2 flex justify-center items-center gap-4'
+                        onClick={() => learnThis()}>
+                        <p className='text-secondary font-bold text-2xl'>Learn</p>
+                        <img src='/plain-logo.png' className='h-full' />
+                        <p className='text-secondary font-bold text-2xl'>This</p>
+                    </button>
                 </div>
             </div>
             {isDeleteModal &&

@@ -24,13 +24,13 @@ function SetPreview({ set, height, showDetails }: { set: Set | undefined, height
                 {set?.themes.map((t, i) => (
                     t.questions.length > 0 &&
                     <div key={`t${i}`}>
-                        <p className='sticky top-0 z-10 bg-secondary w-[100%] border-b-4 border-l-4 p-2 border-primary'>{t?.name}</p>
+                        <p className='sticky top-0 z-10 bg-secondary w-[100%] border-b-4 border-l-4 p-2 border-primary font-bold'>{t?.name}</p>
                         {showDetails &&
                             t?.questions.map((q, j) => (
                                 <div key={`q${j}`}>
                                     <p className='ml-5 p-1 bg-gradient-to-r from-primary to-secondary'>{q.text}</p>
                                     {q?.answers.map((a, k) => (
-                                        <p key={`a${k}`} className='ml-15'>- {a.text}</p>
+                                        <p key={`a${k}`} className='ml-15 font-light'>- {a.text}</p>
                                     ))}
                                 </div>
                             ))}

@@ -8,8 +8,16 @@ import BigActionButton from '../utilities/BigActionButton';
 import { Dispatch, SetStateAction } from 'react';
 import { shortenTitle } from '../../scripts/scripts';
 
-function EditSet({ set, sets, setSets, height, setEditSet, useInfoToast }
-    : { set: SetType | undefined, sets: SetType[] | null, setSets: Dispatch<SetStateAction<SetType[] | null>>, height: string, showDetails: boolean, setEditSet: Dispatch<SetStateAction<SetType | null>>, useInfoToast: any }) {
+function EditSet({ set, sets, setSets, height, setEditSet, useInfoToast, openLearnThisPreset }
+    : {
+        set: SetType | undefined,
+        sets: SetType[] | null, setSets: Dispatch<SetStateAction<SetType[] | null>>,
+        height: string,
+        showDetails: boolean,
+        setEditSet: Dispatch<SetStateAction<SetType | null>>,
+        useInfoToast: any
+        openLearnThisPreset: (set: SetType | null) => void
+    }) {
 
     const [isFullScreen, setIsFullScren] = useState<boolean>(false)
     const [openedThemeIds, setOpenedThemeIds] = useState<Set<number>>(new Set())
@@ -24,6 +32,10 @@ function EditSet({ set, sets, setSets, height, setEditSet, useInfoToast }
         let updatedThemeIdsArray = [...openedThemeIds]
         updatedThemeIdsArray.push(themeId)
         setOpenedThemeIds(new Set(updatedThemeIdsArray))
+    }
+
+    const learnThis = () => {
+        if (set) openLearnThisPreset(set)
     }
 
     return (
@@ -58,7 +70,13 @@ function EditSet({ set, sets, setSets, height, setEditSet, useInfoToast }
                 </div>
             </div>
             <div className='w-full flex items-center justify-center'>
-                <BigActionButton text="Learn this!" action={() => console.log("learn")} />
+                <button
+                    className='h-10 w-[60%] text-xl rounded-2xl bg-secondary hover:bg-accent cursor-pointer border-2 flex justify-center items-center gap-4'
+                    onClick={() => learnThis()}>
+                    <p className='text-secondary font-bold text-2xl'>Learn</p>
+                    <img src='/plain-logo.png' className='h-full' />
+                    <p className='text-secondary font-bold text-2xl'>This</p>
+                </button>
             </div>
         </div >
     )

@@ -1,9 +1,9 @@
-import React from 'react'
-import { CreateUserDto } from '../../types/types'
+import React, { Dispatch, SetStateAction } from 'react'
+import { CreateUserDto, ToastType } from '../../types/types'
 import { useState } from 'react';
 import { fetchRegisterUser } from '../../scripts/scripts';
 
-function RegisterPanel() {
+function RegisterPanel({ useInfoToast, setIsLogin }: { useInfoToast: any, setIsLogin: Dispatch<SetStateAction<boolean>> }) {
 
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
@@ -29,7 +29,12 @@ function RegisterPanel() {
             role: "User"
         }
 
-        await fetchRegisterUser(user)
+        if (await fetchRegisterUser(user)) {
+            useInfoToast("Registration succeeded", ToastType.Ok)
+            setIsLogin(true)
+        } else {
+            useInfoToast("Registration failed", ToastType.Fail)
+        }
     }
 
 

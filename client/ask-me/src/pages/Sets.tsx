@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react"
+import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { Set, User } from "../types/types"
 import HeaderBar from "../components/HeaderBar"
 import { fetchGetSets } from "../scripts/scripts"
 import SetsBody from "../components/sets-components/SetsBody"
 
-function Sets({ useInfoToast }: { useInfoToast: any }) {
+function Sets({ useInfoToast, openLearnThisPreset }: { useInfoToast: any, openLearnThisPreset: (set: Set | null) => void }) {
 
   const [user, setUser] = useState<User | null>(null)
   const [sets, setSets] = useState<Set[] | null>(null)
@@ -34,11 +34,11 @@ function Sets({ useInfoToast }: { useInfoToast: any }) {
 
   return (
     <div className="grid grid-rows-[15%_85%] gap-5">
-      <HeaderBar title="Sets" username={user?.username} />
+      <HeaderBar title="Sets" username={user?.username} openLearnThisPreset={openLearnThisPreset} />
       {isLoading ?
         <div className="loader"></div>
         :
-        <SetsBody sets={sets} setSets={setSets} useInfoToast={useInfoToast} />
+        <SetsBody sets={sets} setSets={setSets} useInfoToast={useInfoToast} openLearnThisPreset={openLearnThisPreset} />
       }
     </div>
   )

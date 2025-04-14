@@ -29,6 +29,7 @@ function EditSetTheme({ index, theme, openedThemeIds, handleCompress, handleExpa
         setIsDeleteConfirm(true)
     }
     const handleDelteConfirm = async () => {
+        setIsDeleteConfirm(false)
         if (await fetchDeleteTheme(theme.id)) {
             let updatedSet = { ...set }
             updatedSet.themes = updatedSet.themes.filter(t => t.id !== theme.id)
