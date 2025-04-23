@@ -7,6 +7,7 @@ import { FaSitemap } from "react-icons/fa";
 import { CgProfile } from "react-icons/cg";
 import { IoSettingsOutline } from "react-icons/io5";
 import { fetchLogoutUser } from '../scripts/scripts';
+import SideBarLink from './utilities/SideBarLink';
 
 function Sidebar() {
 
@@ -23,58 +24,25 @@ function Sidebar() {
                 gridTemplateColumns: isMenuHovered ? "10vw 90vw" : "2.5vw 97.5vw",
                 transition: "grid-template-columns 0.3s ease-in-out",
             }}>
-            <nav className="flex flex-col h-screen bg-background overflow-hidden"
+            <nav className="flex flex-col h-screen bg-background overflow-hidden shadow-md shadow-black"
                 onMouseOver={() => setIsMenuHovered(true)}
                 onMouseLeave={() => setIsMenuHovered(false)}>
-                <Link className="flex justify-around mt-10 pad overflow-hidden h-10 m-2 rounded-lg items-center hover:bg-accent" to="/dashboard">
-                    <div className='flex-1/2 flex justify-start'>
-                        <CiMenuBurger />
-                    </div>
-                    {isMenuHovered &&
-                        <p className='flex-1/2'>Dashboard</p>
-                    }
-                </Link>
-                <Link className="flex justify-around overflow-hidden h-10 m-2 rounded-lg items-center hover:bg-accent" to="/sets">
-                    <div className='flex-1/2 flex justify-start'>
-                        <FaSitemap />
-                    </div>
-                    {isMenuHovered &&
-                        <p className='flex-1/2'>Sets</p>
-                    }
-                </Link>
-                <Link className="flex justify-around overflow-hidden h-10 m-2 rounded-lg items-center hover:bg-accent" to="/questions">
-                    <div className='flex-1/2 flex justify-start'>
-                        <BsQuestionCircle />
-                    </div>
-                    {isMenuHovered &&
-                        <p className='flex-1/2'>Questions</p>
-                    }
-                </Link>
-                <Link className="flex justify-around overflow-hidden h-10 m-2 rounded-lg items-center hover:bg-accent" to="/profile">
-                    <div className='flex-1/2 flex justify-start'>
-                        <CgProfile />
-                    </div>
-                    {isMenuHovered &&
-                        <p className='flex-1/2'>Profile</p>
-                    }
-                </Link>
-                <Link className="flex justify-around overflow-hidden h-10 m-2 rounded-lg items-center hover:bg-accent" to="/settings">
-                    <div className='flex-1/2 flex justify-start'>
-                        <IoSettingsOutline />
-                    </div>
-                    {isMenuHovered &&
-                        <p className='flex-1/2'>Settings</p>
-                    }
-                </Link>
-                <Link className="flex justify-around overflow-hidden h-10 m-2 rounded-lg items-center hover:bg-accent" to="/home"
-                    onClick={() => handleLogout()}>
-                    <div className='flex-1/2 flex justify-start'>
-                        <CiLogout />
-                    </div>
-                    {isMenuHovered &&
-                        <p className='flex-1/2'>Logout</p>
-                    }
-                </Link>
+                <div className='mt-10'>
+                    <SideBarLink icon={CiMenuBurger} isMenuHovered={isMenuHovered} text='Dashboard' linkTo='/dashboard' />
+                    <SideBarLink icon={FaSitemap} isMenuHovered={isMenuHovered} text='Sets' linkTo='/sets' />
+                    <SideBarLink icon={BsQuestionCircle} isMenuHovered={isMenuHovered} text='Questions' linkTo='/questions' />
+                    <SideBarLink icon={CgProfile} isMenuHovered={isMenuHovered} text='Profile' linkTo='/profile' />
+                    <SideBarLink icon={IoSettingsOutline} isMenuHovered={isMenuHovered} text='Settings' linkTo='/settings' />
+                    <Link className="flex justify-between overflow-hidden h-10 m-2 rounded-lg items-center hover:bg-accent p-1" to="/home"
+                        onClick={() => handleLogout()}>
+                        <div className=' flex justify-start'>
+                            <CiLogout />
+                        </div>
+                        {isMenuHovered &&
+                            <p className='w-[65%]'>Logout</p>
+                        }
+                    </Link>
+                </div>
             </nav>
             <main className='bg-primary-50 font'>
                 <Outlet />

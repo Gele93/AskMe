@@ -130,21 +130,22 @@ export const fetchGetSets = async (): Promise<Set[]> => {
 
 export const shortenTitle = (title: string, maxLength: number) => {
     if (!title) return
-    if (title.length < maxLength) {
-        return title
-    }
+    if (title.length < maxLength) return title
 
-    const words = title.split(" ")
+    const words = title.trim().split(" ")
     let wordIndex = 0
     let totalChar = 0
 
     for (let i = 0; i < words.length; i++) {
+        wordIndex = i + 1
         totalChar += words[i].length + 1
         if (totalChar > maxLength) {
-            wordIndex = i - 1
+            wordIndex--
             break
         }
     }
+
+    if (wordIndex === -1) return "..."
 
     const wordsOfShortTitle = []
     for (let i = 0; i < wordIndex; i++) {

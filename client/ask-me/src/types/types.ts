@@ -35,6 +35,13 @@ export interface SetToLearn {
     themes: ThemeWithPriority[];
 }
 
+export interface SetWithScores {
+    id: number;
+    name: string;
+    description: string;
+    themes: ThemeWithScore[];
+}
+
 export interface Theme {
     id: number;
     name: string;
@@ -51,12 +58,29 @@ export interface ThemeWithPriority {
     questions: Question[];
     priority: Priority;
 }
+export interface ThemeWithScore {
+    id: number;
+    name: string;
+    description: string;
+    setId: number;
+    questions: QuestionWithScore[];
+    priority: Priority;
+}
 
 export interface Question {
     id: number;
     text: string;
     themeId: number;
     answers: Answer[];
+}
+
+export interface QuestionWithScore {
+    id: number;
+    text: string;
+    themeId: number;
+    answers: Answer[];
+    score: number;
+    priority: Priority;
 }
 
 export interface Answer {
@@ -84,13 +108,27 @@ export enum ActionType {
     Neutral
 }
 
+export enum AnswerType {
+    Nothing,
+    Bad,
+    Good,
+    Perfect
+}
+
 export enum Priority {
-    Low,
+    High,
     Normal,
-    High
+    Low
 }
 
 export interface LearnSetup {
     questions: number
     goal: number
 }
+
+export enum LearnStage {
+    Question,
+    Next,
+    Finish
+}
+

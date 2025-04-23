@@ -24,13 +24,13 @@ function SetupForm({ set, setSet, setSetup, setup }:
 
         switch (e.target.value) {
             case ("0"):
-                prio = Priority.Low
+                prio = Priority.High
                 break
             case ("1"):
                 prio = Priority.Normal
                 break
             case ("2"):
-                prio = Priority.High
+                prio = Priority.Low
                 break
             default:
                 prio = Priority.Normal
@@ -106,14 +106,14 @@ function SetupForm({ set, setSet, setSetup, setup }:
                     set?.themes?.map(t => (
                         t.questions.length > 0 &&
                         <div className={`flex justify-between text-xl w-[80%]
-                        ${t.priority === Priority.Low && "text-success"}
-                        ${t.priority === Priority.High && "text-warning"}
+                        ${t.priority === Priority.Low && "text-warning"}
+                        ${t.priority === Priority.High && "text-success"}
                         `}>
                             <label htmlFor='sets'>{shortenTitle(t.name, 20)}</label>
                             <select className='border-b-2 border-accent w-[10vw]' id='sets' value={t.priority} onChange={(e) => handlePriorityChange(e, t)}>
-                                <option className='text-center' value="0">low</option>
+                                <option className='text-center' value="2">low</option>
                                 <option className='text-center' value="1">normal</option>
-                                <option className='text-center' value="2">high</option>
+                                <option className='text-center' value="0">high</option>
                             </select>
                         </div>
                     ))}

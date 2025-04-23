@@ -28,12 +28,12 @@ function EditSetTheme({ index, theme, openedThemeIds, handleCompress, handleExpa
         e.stopPropagation()
         setIsDeleteConfirm(true)
     }
-    const handleDelteConfirm = async () => {
-        setIsDeleteConfirm(false)
+    const handleDeleteConfirm = async () => {
         if (await fetchDeleteTheme(theme.id)) {
-            let updatedSet = { ...set }
-            updatedSet.themes = updatedSet.themes.filter(t => t.id !== theme.id)
+            const updatedThemes = set.themes.filter(t => t.id !== theme.id)
+            const updatedSet = { ...set, themes: updatedThemes }
             setEditSet(updatedSet)
+
             if (sets) {
                 let updatedSets = [...sets]
                 updatedSets = updatedSets.map(s => s.id === updatedSet.id ? updatedSet : s)
@@ -44,6 +44,7 @@ function EditSetTheme({ index, theme, openedThemeIds, handleCompress, handleExpa
         } else {
             useInfoToast(`Deletion failed`, ToastType.Fail)
         }
+        setIsDeleteConfirm(false)
     }
 
     const handleSaveClick = (e: React.MouseEvent) => {
@@ -83,8 +84,6 @@ function EditSetTheme({ index, theme, openedThemeIds, handleCompress, handleExpa
         toUpdateTheme.description = e.target.value
         setUpDatedTheme(toUpdateTheme)
     }
-
-
 
     return (
         <>
@@ -166,7 +165,7 @@ function EditSetTheme({ index, theme, openedThemeIds, handleCompress, handleExpa
                         rightText='Cancel'
                         rightAction={() => setIsDeleteConfirm(false)}
                         leftText='Delete'
-                        leftAction={() => handleDelteConfirm()}
+                        leftAction={() => handleDeleteConfirm()}
                     />
                 </ModalWraper>
             }

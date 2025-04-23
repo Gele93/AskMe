@@ -4,10 +4,14 @@ import HeaderBar from "../components/HeaderBar"
 import { fetchGetSets } from "../scripts/scripts"
 import SetsBody from "../components/sets-components/SetsBody"
 
-function Sets({ useInfoToast, openLearnThisPreset }: { useInfoToast: any, openLearnThisPreset: (set: Set | null) => void }) {
+function Sets({ useInfoToast, openLearnThisPreset, sets, setSets }:
+  {
+    useInfoToast: any,
+    openLearnThisPreset: (set: Set | null) => void,
+    sets: Set[], setSets: Dispatch<SetStateAction<Set[] | null>>
+  }) {
 
   const [user, setUser] = useState<User | null>(null)
-  const [sets, setSets] = useState<Set[] | null>(null)
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   useEffect(() => {

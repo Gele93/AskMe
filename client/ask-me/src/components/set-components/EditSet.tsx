@@ -63,7 +63,7 @@ function EditSet({ set, sets, setSets, height, setEditSet, useInfoToast, openLea
                 <div className='mt-5 w-[100%] mx-auto pl-10 pr-10 overflow-y-auto indent-scrollbar'>
                     {set?.themes.map((t, i) => (
                         t.questions.length > 0 &&
-                        <EditSetTheme
+                        <EditSetTheme key={t.id}
                             index={i} theme={t} openedThemeIds={openedThemeIds} handleCompress={handleCompress} handleExpand={handleExpand}
                             useInfoToast={useInfoToast} set={set} setEditSet={setEditSet} sets={sets} setSets={setSets} />
                     ))}

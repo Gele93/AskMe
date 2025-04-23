@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import './App.css'
 import Landing from './pages/Landing'
 import Dashboard from './pages/Dashboard'
-import Sidebar from './components/sidebar'
+import Sidebar from './components/Sidebar'
 import Sets from './pages/Sets'
 import Questions from './pages/Questions'
 import Profile from './pages/Profile'
@@ -24,7 +24,7 @@ function App() {
   const [toastText, setToastText] = useState<string>("")
   const [toastType, setToastType] = useState<ToastType>(ToastType.Info)
   const [isLearnThisPreset, setIsLearnThisPreset] = useState<boolean>(false)
-  const [sets, setSets] = useState<Set[]>()
+  const [sets, setSets] = useState<Set[]>([])
   const [setToLearn, setSetToLearn] = useState<SetToLearn | null>(null)
   const [setup, setSetup] = useState<LearnSetup>({ questions: 1, goal: 100 })
 
@@ -69,6 +69,13 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Navigate to="/home" replace />} />
+          <Route
+            path="learn"
+            element={
+              <ProtectedRoute>
+                <Learn setToLearn={setToLearn} setup={setup} user={user} />
+              </ProtectedRoute>
+            } />
           <Route path='/' element={<Sidebar />} >
             <Route
               path="dashboard"
@@ -77,18 +84,12 @@ function App() {
                   <Dashboard useInfoToast={useInfoToast} openLearnThisPreset={openLearnThisPreset} user={user} />
                 </ProtectedRoute>
               } />
-            <Route
-              path="learn"
-              element={
-                <ProtectedRoute>
-                  <Learn setToLearn={setToLearn} setup={setup} user={user} />
-                </ProtectedRoute>
-              } />
+
             <Route
               path="sets"
               element={
                 <ProtectedRoute>
-                  <Sets useInfoToast={useInfoToast} openLearnThisPreset={openLearnThisPreset} />
+                  <Sets useInfoToast={useInfoToast} openLearnThisPreset={openLearnThisPreset} sets={sets} setSets={setSets} />
                 </ProtectedRoute>
               } />
             <Route

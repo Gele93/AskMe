@@ -15,7 +15,7 @@ function PresetModal({ set, setSet, sets, setIsLearnThisPreset, setSetup, setup 
     }) {
 
     useEffect(() => {
-        if (set == null) {
+        if (!set) {
             if (sets) {
                 let themesWithPriority: ThemeWithPriority[] = sets[0].themes?.map(t => {
                     return { ...t, priority: Priority.Normal }
