@@ -4,7 +4,7 @@ import HeaderBar from '../components/HeaderBar'
 import { User } from '../types/types'
 import CreateSetBody from '../components/create-set-components/CreateSetBody'
 
-function CreateSet() {
+function CreateSet({ useInfoToast }: { useInfoToast: any }) {
 
     const [user, setUser] = useState<User | null>(null)
 
@@ -19,7 +19,7 @@ function CreateSet() {
     return (
         <div>
             <HeaderBar title='Create Set' username={user?.username} />
-            <CreateSetBody user={user} />
+            <CreateSetBody user={user} useInfoToast={useInfoToast} />
         </div>
     )
 }

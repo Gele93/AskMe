@@ -6,13 +6,15 @@ import { useNavigate } from 'react-router-dom';
 
 function LoginPanel() {
 
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const [email, setEmail] = useState<string>("");
+    const [password, setPassword] = useState<string>("");
+    const [errorMsgs, setErrorMsgs] = useState<string[]>([])
     const navigate = useNavigate();
 
 
     const handleLogin = async (e: any) => {
         e.preventDefault()
+        checkValidity()
 
         const loginUser: LoginUserDto = {
             email,
@@ -23,13 +25,22 @@ function LoginPanel() {
         navigate("/dashboard");
     }
 
+    const checkValidity = () => {
+        let updatedErrorMsg = []
+        if (!email)
+            updatedErrorMsg.push("email is missing")
+        if (!password)
+            updatedErrorMsg.push("password is missing")
+        setErrorMsgs(updatedErrorMsg)
+    }
+
     return (
-        <div className='flex flex-col justify-center bg-accent-50 rounded-l-4xl'>
-            <form className='flex flex-col justify-evenly items-center h-[35%]' onSubmit={(e) => handleLogin(e)}>
+        <div className='flex flex-col justify-center items-center bg-accent-50 rounded-l-4xl '>
+            <form className='flex flex-col justify-evenly items-center h-[35%] w-[25vw]' onSubmit={(e) => handleLogin(e)}>
                 <div className='flex justify-between w-[80%]'>
                     <label className='grow-[0.5]' htmlFor="email">Email:</label>
                     <input
-                        className='bg-white'
+                        className='bg-white pl-1'
                         type="email"
                         id="email"
                         value={email}
@@ -39,7 +50,7 @@ function LoginPanel() {
                 <div className='flex justify-between w-[80%]'>
                     <label className='grow-[0.5]' htmlFor="password">Password:</label>
                     <input
-                        className='bg-white'
+                        className='bg-white pl-1'
                         type="password"
                         id="password"
                         value={password}
@@ -54,6 +65,13 @@ function LoginPanel() {
                     </button>
                 </div>
             </form >
+            {errorMsgs[0] &&
+                <div className='absolute text-fail h-20 bottom-[10%]'>
+                    {errorMsgs.map(e => (
+                        <p>{e}</p>
+                    ))}
+                </div>
+            }
         </div >
     );
 }

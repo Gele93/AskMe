@@ -1,4 +1,4 @@
-import { CreateUserDto, LoginUserDto, Set, User } from "../types/types";
+import { CreateUserDto, LoginUserDto, Set, Theme, User } from "../types/types";
 
 const api = "/api"
 
@@ -51,7 +51,7 @@ export const fetchCreateSet = async (set: Set): Promise<boolean> => {
 }
 
 
-export const fetchRegisterUser = async (user: CreateUserDto) => {
+export const fetchRegisterUser = async (user: CreateUserDto): Promise<boolean> => {
     try {
         console.log(api)
         const response = await fetch(`${api}/user/register`, {
@@ -63,11 +63,13 @@ export const fetchRegisterUser = async (user: CreateUserDto) => {
         });
 
         if (!response.ok) {
-            throw new Error('Failed to register user');
+            console.error('Failed to register user');
+            return false
         }
-        console.log('User registered successfully:');
+        return true
     } catch (error) {
         console.error('Error registering user:', error);
+        return false
     }
 }
 
@@ -94,7 +96,7 @@ export const fetchLoginUser = async (user: LoginUserDto): Promise<User> => {
 
 export const fetchLogoutUser = async () => {
     try {
-        const response = await fetch(`${api}/user/login`, {
+        const response = await fetch(`${api}/user/logout`, {
             method: 'POST',
         });
 
@@ -128,21 +130,22 @@ export const fetchGetSets = async (): Promise<Set[]> => {
 
 export const shortenTitle = (title: string, maxLength: number) => {
     if (!title) return
-    if (title.length < maxLength) {
-        return title
-    }
+    if (title.length < maxLength) return title
 
-    const words = title.split(" ")
+    const words = title.trim().split(" ")
     let wordIndex = 0
     let totalChar = 0
 
     for (let i = 0; i < words.length; i++) {
+        wordIndex = i + 1
         totalChar += words[i].length + 1
         if (totalChar > maxLength) {
-            wordIndex = i - 1
+            wordIndex--
             break
         }
     }
+
+    if (wordIndex === -1) return "..."
 
     const wordsOfShortTitle = []
     for (let i = 0; i < wordIndex; i++) {
@@ -168,6 +171,64 @@ export const checkAuthorization = async (): Promise<boolean> => {
         return true;
     } catch (error) {
         console.error('Error checking authorization:', error);
+        return false;
+    }
+};
+
+export const fetchDeleteSet = async (setId: number): Promise<boolean> => {
+    try {
+        const response = await fetch(`${api}/set/${setId}`, {
+            method: 'DELETE',
+            credentials: 'include',
+        });
+
+        if (!response.ok) {
+            console.error('Failed to delete set');
+            return false;
+        }
+        return true;
+    } catch (error) {
+        console.error('Error deleting set:', error);
+        return false;
+    }
+};
+
+export const fetchUpdateTheme = async (theme: Theme): Promise<boolean> => {
+    try {
+        const response = await fetch(`${api}/theme`, {
+            method: 'PATCH',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(theme),
+        });
+
+        if (!response.ok) {
+            console.error('Failed to update theme');
+            return false;
+        }
+        return true;
+    } catch (error) {
+        console.error('Error updating theme:', error);
+        return false;
+    }
+};
+
+export const fetchDeleteTheme = async (themeId: number): Promise<boolean> => {
+    try {
+        const response = await fetch(`${api}/theme/${themeId}`, {
+            method: 'DELETE',
+            credentials: 'include',
+        });
+
+        if (!response.ok) {
+            console.error('Failed to delete theme');
+            return false;
+        }
+        return true;
+    } catch (error) {
+        console.error('Error deleting theme:', error);
         return false;
     }
 };

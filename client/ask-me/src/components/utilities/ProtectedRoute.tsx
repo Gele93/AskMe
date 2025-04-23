@@ -1,5 +1,5 @@
 import React, { Children, useEffect, useState } from 'react'
-import { checkAuthorization } from '../scripts/scripts'
+import { checkAuthorization } from '../../scripts/scripts'
 import { useNavigate } from 'react-router-dom'
 
 

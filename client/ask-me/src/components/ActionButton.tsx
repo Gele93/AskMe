@@ -1,3 +1,4 @@
+/*
 import React from 'react'
 
 function ActionButton({ icon, action }: { icon: React.ReactNode, action: (e: React.MouseEvent<HTMLButtonElement>) => void }) {
@@ -11,3 +12,4 @@ function ActionButton({ icon, action }: { icon: React.ReactNode, action: (e: Rea
 }
 
 export default ActionButton
+*/

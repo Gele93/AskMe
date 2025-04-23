@@ -5,7 +5,7 @@ import CreateSetPreview from './CreateSetPreview'
 import { CreateStage, Set, User } from '../../types/types'
 import CreateSet from '../../pages/CreateSet'
 
-function CreateSetBody({ user }: { user: User | null }) {
+function CreateSetBody({ user, useInfoToast }: { user: User | null, useInfoToast: any }) {
 
     const [stage, setStage] = useState<CreateStage>(CreateStage.Tool)
     const [isFormatedData, setIsFormatedData] = useState<boolean | null>(null)
@@ -21,7 +21,7 @@ function CreateSetBody({ user }: { user: User | null }) {
             {stage === CreateStage.Details &&
                 <CreateSetForm stage={stage} setStage={setStage} name={name} setName={setName} description={description} setDescription={setDescription} file={file} setFile={setFile} isFormatedData={isFormatedData} set={set} setSet={setSet} />}
             {stage === CreateStage.Preview &&
-                <CreateSetPreview stage={stage} setStage={setStage} set={set} />}
+                <CreateSetPreview stage={stage} setStage={setStage} set={set} useInfoToast={useInfoToast}/>}
         </div>
     )
 }

@@ -1,13 +1,14 @@
-import React from 'react'
+import React, { Dispatch, SetStateAction } from 'react'
 import { CgProfile } from "react-icons/cg";
 import { FaPlayCircle } from "react-icons/fa";
+import { Set } from '../types/types';
 
 
 
-function HeaderBar({ title, username }: { title: string, username: string | undefined }) {
+function HeaderBar({ title, username, openLearnThisPreset }: { title: string, username: string | undefined, openLearnThisPreset: (set: Set | null) => void }) {
 
-  const handleAdd = (e: React.MouseEvent<HTMLButtonElement>) => {
-
+  const handlePlay = () => {
+    openLearnThisPreset(null)
   }
 
   return (
@@ -17,7 +18,8 @@ function HeaderBar({ title, username }: { title: string, username: string | unde
       </div>
       <div className='flex items-center grow-[0.8] justify-center'>
         <button>
-          <FaPlayCircle className="cursor-pointer hover:text-accent text-3xl" />
+          <FaPlayCircle className="cursor-pointer hover:text-accent text-3xl"
+            onClick={() => handlePlay()} />
         </button>
       </div>
       <div className='flex justify-center items-center'>

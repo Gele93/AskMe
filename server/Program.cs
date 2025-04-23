@@ -14,6 +14,9 @@ using AskMe.Services.Formaters;
 using AskMe.Services.Readers;
 using AskMe.Services.Sets;
 using AskMe.Repositories.Sets;
+using AskMe.Services.Authenticators;
+using AskMe.Repositories.Themes;
+using AskMe.Services.Themes;
 
 namespace AskMe
 {
@@ -84,7 +87,9 @@ namespace AskMe
             builder.Services.AddScoped<ISetRepository, SetRepository>();
             builder.Services.AddScoped<UserManager<User>>();
             builder.Services.AddScoped<RoleManager<IdentityRole>>();
-
+            builder.Services.AddScoped<IAuthenticator, Authenticator>();
+            builder.Services.AddScoped<IThemeRepository, ThemeRepository>();
+            builder.Services.AddScoped<IThemeService, ThemeService>();
         }
 
 

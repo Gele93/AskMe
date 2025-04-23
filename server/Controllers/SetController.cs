@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.AspNetCore.DataProtection;
+using AskMe.Services.Authenticators;
 
 namespace AskMe.Controllers
 {
@@ -16,10 +17,12 @@ namespace AskMe.Controllers
     {
         private readonly ILogger<SetController> _logger;
         private readonly ISetService _setService;
-        public SetController(ILogger<SetController> logger, ISetService setService)
+        private readonly IAuthenticator _authenticator;
+        public SetController(ILogger<SetController> logger, ISetService setService, IAuthenticator authenticator)
         {
             _logger = logger;
             _setService = setService;
+            _authenticator = authenticator;
         }
 
         [HttpPost("formated/preview")]
@@ -102,6 +105,34 @@ namespace AskMe.Controllers
             {
                 _logger.LogError($"Error while getting sets {ex.Message}");
                 return StatusCode(500, "Error while getting sets");
+            }
+        }
+
+        [Authorize]
+        [HttpDelete("{setId:int}")]
+        public async Task<IActionResult> DeleteSet(int setId)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (userId is null)
+            {
+                _logger.LogError("UserId is not found");
+                return Unauthorized();                
+            }
+            if (await _authenticator.AuthenticateUserToSet(userId, setId) == false)
+            {
+                _logger.LogError("User is not authenticated to delete this set.");
+                return Unauthorized();
+            }
+            try
+            {
+                await _setService.DeleteById(setId);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error while deleting set {ex.Message}");
+                return StatusCode(500, "Error while deleting set");
             }
         }
 

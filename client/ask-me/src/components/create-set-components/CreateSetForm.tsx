@@ -29,9 +29,9 @@ function CreateSetForm({ stage, setStage, name, setName, description, setDescrip
         <>
             <div className='grid grid-cols-[23%_54%_23%] items-center w-[100%] h-[100%]'>
                 <button
-                    className='text-3xl cursor-pointer p-4 border-background bg-secondary w-[30%] rounded-xl mx-auto hover:bg-primary flex items-center justify-center'
+                    className='text-3xl border-1 cursor-pointer p-4 bg-secondary w-20 rounded-xl mx-auto hover:bg-primary flex items-center justify-center'
                     onClick={() => setStage(CreateStage.Tool)}>
-                    <MdArrowBackIos />
+                    <MdArrowBackIos className='ml-3' />
                 </button>
                 <form className=" flex flex-col justify-around gap-4 p-4 items-center border h-[80%] w-[60%] mx-auto border-background rounded-3xl bg-secondary">
                     <p className='text-xl font-bold'>Set details</p>
@@ -67,7 +67,7 @@ function CreateSetForm({ stage, setStage, name, setName, description, setDescrip
                     </div>
                 </form>
                 <button
-                    className='text-3xl cursor-pointer p-4 border-background bg-secondary w-[30%] rounded-xl mx-auto hover:bg-primary flex items-center justify-center'
+                    className='border-1 text-3xl cursor-pointer p-4 bg-secondary w-20 rounded-xl mx-auto hover:bg-primary flex items-center justify-center'
                     onClick={() => handleNextClick()}>
                     <MdArrowForwardIos />
                 </button>

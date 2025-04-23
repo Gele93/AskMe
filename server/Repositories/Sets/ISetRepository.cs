@@ -6,5 +6,8 @@ namespace AskMe.Repositories.Sets
     {
         Task<Set> CreateSet(Set set);
         Task<List<Set>> GetAll(string userId);
+        Task<Set> GetById(int id);
+        Task DeleteById(int id);
+
     }
 }

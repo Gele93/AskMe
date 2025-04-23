@@ -8,8 +8,7 @@ namespace AskMe.Services.Formaters
     public class TxtFormater : ITxtFormater
     {
         private readonly ILogger<TxtFormater> _logger;
-        private readonly string _apiKey = "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";
-        private readonly string _apiKey2 = "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";
+        private string _apiKey = "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";
 
         public TxtFormater(ILogger<TxtFormater> logger)
         {
@@ -50,7 +49,7 @@ namespace AskMe.Services.Formaters
                     }
                 };
 
-                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _apiKey2);
+                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _apiKey);
                 string json = JsonSerializer.Serialize(requestBody);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
                 HttpResponseMessage response = await client.PostAsync(url, content);
