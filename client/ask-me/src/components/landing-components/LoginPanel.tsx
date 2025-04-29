@@ -35,7 +35,7 @@ function LoginPanel() {
     }
 
     return (
-        <div className='flex flex-col justify-center items-center bg-accent-50 rounded-l-4xl '>
+        <div className='flex flex-col justify-center items-center bg-accent-05 backdrop-blur-xs  rounded-l-4xl '>
             <form className='flex flex-col justify-evenly items-center h-[35%] w-[25vw]' onSubmit={(e) => handleLogin(e)}>
                 <div className='flex justify-between w-[80%]'>
                     <label className='grow-[0.5]' htmlFor="email">Email:</label>

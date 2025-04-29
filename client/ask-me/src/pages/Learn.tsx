@@ -1,12 +1,15 @@
-import React, { useEffect, useState } from 'react'
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { AnswerType, LearnSetup, LearnStage, Priority, QuestionWithScore, SetToLearn, SetWithScores, User } from '../types/types'
 import LearnHeader from '../components/learn-components/LearnHeader'
 import QuestionTile from '../components/learn-components/QuestionTile'
 import NextQuestion from '../components/learn-components/NextQuestion'
 import Finish from '../components/learn-components/Finish'
 import { useNavigate } from 'react-router-dom'
+import ConfirmModal from '../components/utilities/ConfirmModal'
+import ModalWraper from '../components/utilities/ModalWraper'
 
-function Learn({ setToLearn, setup, user }: { setToLearn: SetToLearn | null, setup: LearnSetup, user: User | null }) {
+function Learn({ setToLearn, setSetToLearn, setup, user }:
+    { setToLearn: SetToLearn | null, setSetToLearn: Dispatch<SetStateAction<SetToLearn | null>>, setup: LearnSetup, user: User | null }) {
 
     const minModifier = 0.7
     const maxModifier = 1.3
@@ -18,6 +21,7 @@ function Learn({ setToLearn, setup, user }: { setToLearn: SetToLearn | null, set
     const [currentQuestion, setCurrentQuestion] = useState<QuestionWithScore | null>(null)
     const [stage, setStage] = useState<LearnStage>(LearnStage.Next)
     const [currentScore, setCurrentScore] = useState<number>(0)
+    const [isConfirmExit, setIsConfirmExit] = useState<boolean>(false)
 
     const navigate = useNavigate()
 
@@ -101,11 +105,20 @@ function Learn({ setToLearn, setup, user }: { setToLearn: SetToLearn | null, set
         }
     }
 
+    const handleConfirmExit = () => {
+        setSetToLearn(null)
+        navigate("/dashboard")
+    }
+    const handleCancelExit = () => {
+        setIsConfirmExit(false)
+    }
+
     return (
-        <div>
-            <LearnHeader setName={setToLearn?.name} username={user?.username} totalQuestions={setup.questions} currentQuestion={questionNumber} />
+        <div className='w-[100vw] h-[100vh] absolute top-0 left-0'>
+            <div className="absolute top-0 left-0 w-full h-full -z-10 bg-cover bg-center backdrop-blur-md filter blur-xs" style={{ backgroundImage: `url('landing-bg.jpg')` }}></div>
+            <LearnHeader setName={setToLearn?.name} username={user?.username} totalQuestions={setup.questions} currentQuestion={questionNumber} setIsConfirmExit={setIsConfirmExit} />
             <section
-                className="absolute top-0 left-0 w-[100vw] h-[100vh] flex justify-center items-center"
+                className="absolute top-0 left-0 w-[100vw] h-[100vh] flex justify-center items-center z-10"
                 onClick={() => handleClick()}>
                 {stage === LearnStage.Next &&
                     <NextQuestion questionNumber={questionNumber} totalQuestionsNumber={setup.questions} />
@@ -128,6 +141,11 @@ function Learn({ setToLearn, setup, user }: { setToLearn: SetToLearn | null, set
                     <Finish setup={setup} score={currentScore} />
                 }
             </section>
+            {isConfirmExit &&
+                <ModalWraper>
+                    <ConfirmModal title='Exit learning session?' leftText='Exit' leftAction={handleConfirmExit} rightText='Continue' rightAction={handleCancelExit} />
+                </ModalWraper>
+            }
         </div>
     )
 }

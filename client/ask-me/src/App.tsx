@@ -73,7 +73,7 @@ function App() {
             path="learn"
             element={
               <ProtectedRoute>
-                <Learn setToLearn={setToLearn} setup={setup} user={user} />
+                <Learn setToLearn={setToLearn} setSetToLearn={setSetToLearn} setup={setup} user={user} />
               </ProtectedRoute>
             } />
           <Route path='/' element={<Sidebar />} >
@@ -81,7 +81,7 @@ function App() {
               path="dashboard"
               element={
                 <ProtectedRoute>
-                  <Dashboard useInfoToast={useInfoToast} openLearnThisPreset={openLearnThisPreset} user={user} />
+                  <Dashboard useInfoToast={useInfoToast} openLearnThisPreset={openLearnThisPreset} user={user} sets={sets} setSets={setSets} />
                 </ProtectedRoute>
               } />
 
@@ -117,7 +117,7 @@ function App() {
               path="sets/create"
               element={
                 <ProtectedRoute>
-                  <CreateSet useInfoToast={useInfoToast} />
+                  <CreateSet useInfoToast={useInfoToast} openLearnThisPreset={openLearnThisPreset}/>
                 </ProtectedRoute>
               } />
             <Route

@@ -1,28 +1,34 @@
 import React from 'react'
-import { CreateStage, Set } from '../../types/types';
+import { CreateStage, Set, ToastType } from '../../types/types';
 import { useState } from 'react';
 import { MdArrowForwardIos, MdArrowBackIos } from "react-icons/md";
 import { RxValue } from 'react-icons/rx';
 import { fetchCreateSetPreview } from '../../scripts/scripts';
 
-function CreateSetForm({ stage, setStage, name, setName, description, setDescription, file, setFile, isFormatedData, set, setSet }:
+function CreateSetForm({ stage, setStage, name, setName, description, setDescription, file, setFile, isFormatedData, set, setSet, useInfoToast }:
     {
         stage: CreateStage; setStage: React.Dispatch<React.SetStateAction<CreateStage>>
         name: string, setName: React.Dispatch<React.SetStateAction<string>>
         description: string, setDescription: React.Dispatch<React.SetStateAction<string>>
         file: any | null, setFile: React.Dispatch<React.SetStateAction<any | null>>
         isFormatedData: boolean | null
-        set: Set | undefined, setSet: React.Dispatch<React.SetStateAction<Set | undefined>>
+        set: Set | undefined, setSet: React.Dispatch<React.SetStateAction<Set | undefined>>,
+        useInfoToast: any
     }) {
 
     const [isLoading, setIsLoading] = useState<boolean>(false)
 
     const handleNextClick = async () => {
         setIsLoading(true)
-        const setPreview: Set | undefined = await fetchCreateSetPreview(name, description, file, isFormatedData)
-        setSet(setPreview)
-        setStage(CreateStage.Preview)
-        setIsLoading(false)
+        try {
+            const setPreview: Set | undefined = await fetchCreateSetPreview(name, description, file, isFormatedData)
+            setSet(setPreview)
+            setStage(CreateStage.Preview)
+            setIsLoading(false)
+        } catch (error) {
+            useInfoToast("Could not create set preview", ToastType.Fail)
+        }
+
     }
 
     return (

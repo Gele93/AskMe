@@ -17,14 +17,11 @@ function Sidebar() {
         await fetchLogoutUser()
         localStorage.setItem("user", "")
     }
-
+    
     return (
-        <div className="grid grid-rows-[100vh]"
-            style={{
-                gridTemplateColumns: isMenuHovered ? "10vw 90vw" : "2.5vw 97.5vw",
-                transition: "grid-template-columns 0.3s ease-in-out",
-            }}>
-            <nav className="flex flex-col h-screen bg-background overflow-hidden shadow-md shadow-black"
+        <div className="w-[100vw] h-[100vh] absolute">
+            <nav className={`absolute flex flex-col h-screen bg-background overflow-hidden  shadow-black z-100 transition-all duration-300 ease-in-out
+            ${isMenuHovered ? "w-[10vw] shadow-xl" : "w-[2.5vw] shadow-md "}`}
                 onMouseOver={() => setIsMenuHovered(true)}
                 onMouseLeave={() => setIsMenuHovered(false)}>
                 <div className='mt-10'>
@@ -44,7 +41,7 @@ function Sidebar() {
                     </Link>
                 </div>
             </nav>
-            <main className='bg-primary-50 font'>
+            <main className='absolute bg-primary-50 font w-[100vw] h-[100vh]'>
                 <Outlet />
             </main>
         </div>

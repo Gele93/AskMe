@@ -11,7 +11,7 @@ import { shortenTitle } from '../../scripts/scripts';
 function EditSet({ set, sets, setSets, height, setEditSet, useInfoToast, openLearnThisPreset }
     : {
         set: SetType | undefined,
-        sets: SetType[] | null, setSets: Dispatch<SetStateAction<SetType[] | null>>,
+        sets: SetType[], setSets: Dispatch<SetStateAction<SetType[]>>,
         height: string,
         showDetails: boolean,
         setEditSet: Dispatch<SetStateAction<SetType | null>>,

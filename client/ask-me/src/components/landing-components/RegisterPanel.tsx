@@ -66,7 +66,7 @@ function RegisterPanel({ useInfoToast, setIsLogin }: { useInfoToast: any, setIsL
 
 
     return (
-        <div className='flex flex-col justify-center items-center bg-accent-50 rounded-r-4xl'>
+        <div className='flex flex-col justify-center items-center bg-accent-05 backdrop-blur-xs rounded-r-4xl'>
             <form className='flex flex-col justify-evenly items-center h-[60%] w-[25vw]' onSubmit={(e) => handleSubmit(e)}>
                 <div className='flex justify-between w-[80%]'>
                     <label className='grow-[0.5]' htmlFor="firstName">First Name:</label>
@@ -137,7 +137,7 @@ function RegisterPanel({ useInfoToast, setIsLogin }: { useInfoToast: any, setIsL
                 </div>
             </form >
             {errorMsgs[0] &&
-                <div className='absolute text-fail h-20 bottom-[15%]'>
+                <div className='absolute text-fail h-20 bottom-[2%]'>
                     {errorMsgs.map(e => (
                         <p className='h-4'>{e}</p>
                     ))}

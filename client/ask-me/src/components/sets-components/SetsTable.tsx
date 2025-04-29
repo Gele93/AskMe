@@ -6,7 +6,7 @@ function SetsTable({ sets, setEditSet }: { sets: Set[] | null, setEditSet: Dispa
     const [hoverId, setHoverId] = useState<number>(0)
 
     return (
-        <table className="w-[80%] mx-auto bg-secondary text-left p-5">
+        <table className="w-[80%] mx-auto bg-secondary text-left">
             <thead className='bg-primary'>
                 <tr className=''>
                     <th className='p-2 rounded-tl-3xl'>Name</th>
@@ -21,16 +21,16 @@ function SetsTable({ sets, setEditSet }: { sets: Set[] | null, setEditSet: Dispa
                         className='bg-secondary w-full cursor-pointer transform hover:bg-primary hover:scale-102 transition duration-300 ease-in-out'
                         onMouseOver={() => setHoverId(s.id)}
                         onClick={() => setEditSet(s)}>
-                        <>
-                            <td className='p-1'>{s.name}</td>
-                            <td className='p-1'>{s.description}</td>
-                            <td className='p-1 flex justify-between items-center'>
-                                <p>{s.themes.length}</p>
+                        <td className='p-1 '>{s.name}</td>
+                        <td className='p-1 '>{s.description}</td>
+                        <td className='p-1 '>
+                            <div className='flex justify-between items-center '>
+                                <p >{s.themes.length}</p>
                                 {hoverId === s.id &&
                                     <CiEdit className='text-[2rem]' />
                                 }
-                            </td>
-                        </>
+                            </div>
+                        </td>
                     </tr>
                 ))}
             </tbody>

@@ -73,7 +73,6 @@ namespace AskMe.Services.Sets
 
             await FillSetFromDto(setData, set);
             await _setRepository.CreateSet(set);
-
         }
 
         public async Task<List<SetDto>> GetAll(string userId)

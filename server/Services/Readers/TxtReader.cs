@@ -39,8 +39,18 @@ namespace AskMe.Services.Readers
 
                 if (string.IsNullOrEmpty(lineContent)) continue;
 
-                bool isTheme = lineContent.StartsWith("##");
-                bool isQuestion = lineContent.StartsWith("#");
+                bool isTheme = false;
+                bool isQuestion = false;
+
+                if (lineContent.StartsWith("##"))
+                {
+                    isTheme = true;
+
+                }
+                else if (lineContent.StartsWith("#"))
+                {
+                    isQuestion = true;
+                }
 
                 lineContent = lineContent.TrimStart('#', ' ', '-', '*');
 
