@@ -8,7 +8,7 @@
 
 ## Snapshots:
 
- ![landing](./Snapshots/Landing.png)
+ ![landing](./Snapshots/landing.png)
 
 
 ##  1. Main features: 
