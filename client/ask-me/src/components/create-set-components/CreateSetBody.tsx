@@ -19,7 +19,7 @@ function CreateSetBody({ user, useInfoToast }: { user: User | null, useInfoToast
             {stage === CreateStage.Tool &&
                 <CreateSetToolChooser stage={stage} setStage={setStage} user={user} isFormatedData={isFormatedData} setIsFormatedData={setIsFormatedData} />}
             {stage === CreateStage.Details &&
-                <CreateSetForm stage={stage} setStage={setStage} name={name} setName={setName} description={description} setDescription={setDescription} file={file} setFile={setFile} isFormatedData={isFormatedData} set={set} setSet={setSet} />}
+                <CreateSetForm stage={stage} setStage={setStage} name={name} setName={setName} description={description} setDescription={setDescription} file={file} setFile={setFile} isFormatedData={isFormatedData} set={set} setSet={setSet} useInfoToast={useInfoToast}/>}
             {stage === CreateStage.Preview &&
                 <CreateSetPreview stage={stage} setStage={setStage} set={set} useInfoToast={useInfoToast}/>}
         </div>

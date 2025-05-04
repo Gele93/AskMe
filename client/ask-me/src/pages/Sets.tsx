@@ -8,7 +8,7 @@ function Sets({ useInfoToast, openLearnThisPreset, sets, setSets }:
   {
     useInfoToast: any,
     openLearnThisPreset: (set: Set | null) => void,
-    sets: Set[], setSets: Dispatch<SetStateAction<Set[] | null>>
+    sets: Set[], setSets: Dispatch<SetStateAction<Set[]>>
   }) {
 
   const [user, setUser] = useState<User | null>(null)

@@ -22,10 +22,15 @@ function CreateSetPreview({ stage, setStage, set, useInfoToast }:
 
     const handleSubmit = async () => {
         if (set) {
-            if (await fetchCreateSet(set)) {
-                useInfoToast("Set successfully created!", ToastType.Ok)
-                setIsSubmited(true)
-            } else {
+            try {
+                if (await fetchCreateSet(set)) {
+                    useInfoToast("Set successfully created!", ToastType.Ok)
+                    setIsSubmited(true)
+                } else {
+                    useInfoToast("Set creation failed", ToastType.Fail)
+                }
+            }
+            catch (error) {
                 useInfoToast("Set creation failed", ToastType.Fail)
             }
         }

@@ -5,9 +5,9 @@ import { useState } from 'react'
 import { User, Set } from '../types/types'
 import { fetchGetSets } from '../scripts/scripts'
 
-function Dashboard({ useInfoToast, openLearnThisPreset, user }: { useInfoToast: any, openLearnThisPreset: (set: Set | null) => void, user: User | null }) {
+function Dashboard({ useInfoToast, openLearnThisPreset, user, sets, setSets }:
+     { useInfoToast: any, openLearnThisPreset: (set: Set | null) => void, user: User | null, sets: Set[], setSets: Dispatch<SetStateAction<Set[]>> }) {
 
-    const [sets, setSets] = useState<Set[] | null>(null)
 
     useEffect(() => {
         const getSets = async () => {
@@ -18,7 +18,7 @@ function Dashboard({ useInfoToast, openLearnThisPreset, user }: { useInfoToast: 
     }, [])
 
     return (
-        <div>
+        <div className='w-[100vw] h-[100vh] absolute'>
             <HeaderBar title={"Dashboard"} username={user?.username} openLearnThisPreset={openLearnThisPreset} />
             <DashboardBody sets={sets} setSets={setSets} useInfoToast={useInfoToast} openLearnThisPreset={openLearnThisPreset} />
         </div>

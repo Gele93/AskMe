@@ -10,7 +10,7 @@ import SetModal from './SetModal';
 import { SetStateAction } from 'react';
 
 function DashboardBody({ sets, setSets, useInfoToast, openLearnThisPreset }:
-    { sets: Set[] | null, setSets: Dispatch<SetStateAction<Set[] | null>>, useInfoToast: any, openLearnThisPreset: (set: Set | null) => void }) {
+    { sets: Set[], setSets: Dispatch<SetStateAction<Set[]>>, useInfoToast: any, openLearnThisPreset: (set: Set | null) => void }) {
 
     const [clickedSet, setClickedSet] = useState<Set | null>(null)
 

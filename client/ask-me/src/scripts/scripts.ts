@@ -22,7 +22,7 @@ export const fetchCreateSetPreview = async (name: string, description: string, f
         console.log('Success:', result);
         return result
     } catch (error) {
-        console.error('Error:', error);
+        console.error('failed to create set preview:', error);
         throw new Error("failed to create set preview")
     }
 };

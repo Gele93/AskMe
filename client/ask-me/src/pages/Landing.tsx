@@ -21,13 +21,14 @@ function Landing({ useInfoToast }: { useInfoToast: any }) {
     }, [navigate]);
 
     return (
-        <div className='bg-[#eaf2ea] w-full h-[100vh] grid grid-rows-[10vh_90vh]'>
+        <div className='w-full h-[100vh] grid grid-rows-[10vh_90vh]'>
+            <div className="absolute top-0 left-0 w-full h-full -z-10 bg-cover bg-center" style={{ backgroundImage: `url('landing-bg.jpg')` }}></div>
             <section className='flex items-center m-10'>
                 <p className='text-5xl text-accent '></p>
             </section>
             <section className='grid grid-cols-[40vw_50vw] gap-20'>
                 <LandingBanner />
-                <section className='grid grid-cols-2 h-[70%] self-center shadow-xl rounded-4xl border-4 border-[#eaf2ea]  '>
+                <section className='grid grid-cols-2 h-[70%] self-center shadow-xl rounded-4xl border-4 border-[#eaf2ea]'>
                     {isLogin ?
                         <LoginPanel />
                         :
@@ -44,7 +45,6 @@ function Landing({ useInfoToast }: { useInfoToast: any }) {
                         :
                         <RegisterPanel useInfoToast={useInfoToast} setIsLogin={setIsLogin} />
                     }
-
                 </section>
             </section>
         </div>

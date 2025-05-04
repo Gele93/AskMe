@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import HeaderBar from '../components/HeaderBar'
-import { User } from '../types/types'
+import { Set, User } from '../types/types'
 import CreateSetBody from '../components/create-set-components/CreateSetBody'
 
-function CreateSet({ useInfoToast }: { useInfoToast: any }) {
+function CreateSet({ useInfoToast, openLearnThisPreset }: { useInfoToast: any, openLearnThisPreset: (set: Set | null) => void }) {
 
     const [user, setUser] = useState<User | null>(null)
 
@@ -18,7 +18,7 @@ function CreateSet({ useInfoToast }: { useInfoToast: any }) {
 
     return (
         <div>
-            <HeaderBar title='Create Set' username={user?.username} />
+            <HeaderBar title='Create Set' username={user?.username} openLearnThisPreset={openLearnThisPreset} />
             <CreateSetBody user={user} useInfoToast={useInfoToast} />
         </div>
     )

@@ -10,7 +10,7 @@ import { fetchDeleteTheme, fetchUpdateTheme } from '../../scripts/scripts';
 function EditSetTheme({ index, theme, openedThemeIds, handleCompress, handleExpand, useInfoToast, set, setEditSet, sets, setSets }
     : {
         index: number, theme: Theme, openedThemeIds: Set<number>, handleCompress: any, handleExpand: any, useInfoToast: any, set: SetType,
-        setEditSet: Dispatch<SetStateAction<SetType | null>>, sets: SetType[] | null, setSets: Dispatch<SetStateAction<SetType[] | null>>
+        setEditSet: Dispatch<SetStateAction<SetType | null>>, sets: SetType[] , setSets: Dispatch<SetStateAction<SetType[] >>
     }) {
 
     const [isEdit, setIsEdit] = useState<boolean>(false)

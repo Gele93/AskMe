@@ -2,7 +2,6 @@ services:
   server:    
     build:
       context: ./server
-      dockerfile: Dockerfile
     ports:
       - "8080:8080"
     depends_on:
@@ -18,3 +17,8 @@ services:
       - ConnectionString=${DB_CONNECTION_STRING}
     ports:
       - "1433:1433"
+  client:  
+    build:
+      context: ./client/ask-me
+    ports:
+      - "5173:5173"
