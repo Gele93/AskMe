@@ -9,6 +9,14 @@
 ## Snapshots:
 
  ![landing](./Snapshots/landing.png)
+ ![dashboard](./Snapshots/dashboard.png)
+ ![create](./Snapshots/create.png)
+ ![edit](./Snapshots/edit.png)
+ ![setup](./Snapshots/setup.png)
+ ![learn1](./Snapshots/learn1.png)
+ ![learn2](./Snapshots/learn2.png)
+ ![learn3](./Snapshots/learn3.png)
+ ![learn4](./Snapshots/learn4.png)
 
 
 ##  1. Main features: 
