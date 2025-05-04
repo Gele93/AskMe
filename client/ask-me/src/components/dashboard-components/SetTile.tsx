@@ -23,8 +23,8 @@ function SetTile({ set, setClickedSet }: { set: Set, setClickedSet: Dispatch<Set
         </div>
         :
         <>
-          <p className='text-2xl mb-2'>{shortenTitle(set.name, 20)}</p>
-          <p className='text-[0.8rem]'>{shortenTitle(set.description, 80)}</p>
+          <p className='text-2xl mb-2'>{shortenTitle(set.name, 17)}</p>
+          <p className='text-[0.8rem]'>{shortenTitle(set.description, 60)}</p>
         </>
       }
     </div>
