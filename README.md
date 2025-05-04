@@ -8,6 +8,9 @@
 
 ## Snapshots:
 
+ ![landing](./Snapshots/Landing.png)
+
+
 ##  1. Main features: 
 - 📄 **Import Raw Text**: Upload and parse `.txt` files into organized learning sets.
 - 🧠 **Create Learning Sets**: Structure your content into reusable, editable sets.
