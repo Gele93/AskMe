@@ -57,7 +57,7 @@ function CreateSetToolChooser({ stage, setStage, user, isFormatedData, setIsForm
                 </button>
                 <button
                     onClick={() => handleFormatedChoice()}
-                    className={`grid grid-rows-[10%_70%] gap-5 rounded-l-3xl cursor-pointer hover:shadow-2xl border-r-2 border-primary-50 
+                    className={`grid grid-rows-[10%_70%] gap-5  cursor-pointer hover:shadow-2xl border-r-2 border-primary-50 
                     ${isFormatedData === true ? "shadow-2xl bg-primary transform scale-[1.05]" : null} transition duration-500 ease-in-out `}>
                     <p className={` ${isFormatedData === true ? "bg-secondary-50" : "bg-primary-50"} text-2xl transition duration-500 ease-in-out`}>
                         Use my <span className=' font-bold'>Formated</span> data
