@@ -8,14 +8,23 @@
 
 ## Snapshots:
 
+- Landing page
  ![landing](./Snapshots/landing.png)
+- Dashboard
  ![dashboard](./Snapshots/dashboard.png)
+- Create set
  ![create](./Snapshots/create.png)
+- Update set
  ![edit](./Snapshots/edit.png)
+- Setup learning session
  ![setup](./Snapshots/setup.png)
+- Learning session 1
  ![learn1](./Snapshots/learn1.png)
+- Learning session 2
  ![learn2](./Snapshots/learn2.png)
+- Learning session 3
  ![learn3](./Snapshots/learn3.png)
+- Learning session 4
  ![learn4](./Snapshots/learn4.png)
 
 
