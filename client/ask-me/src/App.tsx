@@ -16,6 +16,7 @@ import Settings from './pages/Settings'
 import PresetModal from './components/learn-this-components/PresetModal'
 import { fetchGetSets } from './scripts/scripts'
 import Learn from './pages/Learn'
+import ResetPassword from './pages/ResetPassword'
 
 function App() {
 
@@ -129,6 +130,7 @@ function App() {
               } />
           </Route>
           <Route path="/home" element={<Landing useInfoToast={useInfoToast} />} />
+          <Route path="/reset-password" element={<ResetPassword useInfoToast={useInfoToast} />} />
         </Routes>
         {isLearnThisPreset &&
           <PresetModal set={setToLearn} setSet={setSetToLearn} sets={sets} setIsLearnThisPreset={setIsLearnThisPreset} setSetup={setSetup} setup={setup} />}

@@ -31,10 +31,14 @@ function RegisterPanel({ useInfoToast, setIsLogin }: { useInfoToast: any, setIsL
             role: "User"
         }
 
+        console.log(user)
+
         if (await fetchRegisterUser(user)) {
+            console.log("succes")
             useInfoToast("Registration succeeded", ToastType.Ok)
             setIsLogin(true)
         } else {
+            console.log("fail")
             useInfoToast("Registration failed", ToastType.Fail)
         }
     }
@@ -56,7 +60,7 @@ function RegisterPanel({ useInfoToast, setIsLogin }: { useInfoToast: any, setIsL
 
         setErrorMsgs(updatedErrorMsg)
 
-        if (updatedErrorMsg) return false
+        if (updatedErrorMsg.length > 0) return false
         return true
     }
 

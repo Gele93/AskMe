@@ -232,3 +232,25 @@ export const fetchDeleteTheme = async (themeId: number): Promise<boolean> => {
         return false;
     }
 };
+
+
+export const fetchForgotPasswordEmail = async (email: string) => {
+    try {
+        const response = await fetch(`${api}/user/forgot-password`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ "email": email }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to send forgot password email');
+        }
+        console.log('Forgot password email sent successfully');
+        return true;
+    } catch (error) {
+        console.error('Error sending forgot password email:', error);
+        return false;
+    }
+}

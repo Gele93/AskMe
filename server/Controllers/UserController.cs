@@ -4,6 +4,7 @@ using AskMe.Services.UserServices;
 using Azure.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -101,11 +102,11 @@ namespace AskMe.Controllers
         }
 
         [HttpPost("forgot-password")]
-        public async Task<IActionResult> ForgotPassword([FromBody] string email)
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequest request)
         {
             try
             {
-                var result = await _userService.ForgotPassword(email);
+                var result = await _userService.ForgotPassword(request.Email);
 
                 if (!result)
                     return BadRequest("Email not found");

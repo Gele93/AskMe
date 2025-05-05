@@ -1,15 +1,19 @@
 ﻿using AskMe.Data.Entities;
 using AskMe.Data.Models.AuthModels;
+using AskMe.Data.Models.PasswordTokens;
 using AskMe.Data.Models.UserModels;
+using AskMe.Repositories.User;
+using AskMe.Services.Emails;
 using Microsoft.AspNetCore.Identity;
 
 namespace AskMe.Services.UserServices
 {
-    public class UserService(UserManager<User> userManager, ITokenService tokenService) : IUserService
+    public class UserService(UserManager<User> userManager, ITokenService tokenService, IUserRepository userRepository, SendGridEmailService emailService) : IUserService
     {
         private UserManager<User> _userManager = userManager;
         private ITokenService _tokenService;
-
+        private IUserRepository _userRepository = userRepository;
+        private SendGridEmailService _emailService = emailService;
 
         public async Task<AuthResult> RegisterAsync(CreateUserDto userDto)
         {
@@ -57,9 +61,26 @@ namespace AskMe.Services.UserServices
 
             return new UserDto(user.FirstName, user.LastName, user.SubscriptionLevel, user.Email, user.UserName);
         }
-        public Task<bool> ForgotPassword(string email)
+        public async Task<bool> ForgotPassword(string email)
         {
-            throw new NotImplementedException();    
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+                return false;
+
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var expDate = DateTime.UtcNow.AddMinutes(20);
+            var pwToken = new PasswordToken
+            {
+                UserId = user.Id,
+                Token = token,
+                ExpirationDate = expDate,
+                IsUsed = false
+            };
+
+            var createdToken = await _userRepository.CreatePasswordToken(pwToken);
+            var callbackUrl = $"http://localhost:5173/reset-password?token={createdToken.Token}&email={email}";
+            await _emailService.SendEmailAsync(email, "Reset Password", $"<a href='{callbackUrl}'>Reset Password</a>");
+            return true;
         }
 
 

@@ -17,6 +17,8 @@ using AskMe.Repositories.Sets;
 using AskMe.Services.Authenticators;
 using AskMe.Repositories.Themes;
 using AskMe.Services.Themes;
+using AskMe.Repositories.User;
+using AskMe.Services.Emails;
 
 namespace AskMe
 {
@@ -89,7 +91,10 @@ namespace AskMe
             builder.Services.AddScoped<RoleManager<IdentityRole>>();
             builder.Services.AddScoped<IAuthenticator, Authenticator>();
             builder.Services.AddScoped<IThemeRepository, ThemeRepository>();
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IThemeService, ThemeService>();
+            builder.Services.Configure<SendGridSettings>(builder.Configuration.GetSection("SendGrid"));
+            builder.Services.AddScoped<SendGridEmailService>();
         }
 
 
@@ -173,7 +178,9 @@ namespace AskMe
                     options.Password.RequireLowercase = false;
                 })
                 .AddRoles<IdentityRole>()
-                .AddEntityFrameworkStores<AskMeContext>();
+                .AddEntityFrameworkStores<AskMeContext>()
+                .AddDefaultTokenProviders();
+            ;
         }
 
         static void AddCookiePolicy(WebApplicationBuilder builder)
