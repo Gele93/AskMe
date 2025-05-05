@@ -100,6 +100,26 @@ namespace AskMe.Controllers
             return Ok("Valid user authorized.");
         }
 
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgotPassword([FromBody] string email)
+        {
+            try
+            {
+                var result = await _userService.ForgotPassword(email);
+
+                if (!result)
+                    return BadRequest("Email not found");
+
+                return Ok("Password reset link sent to your email.");
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"An error occured while processing forgot password: {ex.Message}");
+                return StatusCode(500, "Forgot password failed.");
+            }
+        }
+
         private void AddErrors(AuthResult result)
         {
             foreach (var error in result.ErrorMessages)
