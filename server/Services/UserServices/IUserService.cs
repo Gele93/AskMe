@@ -9,5 +9,6 @@ namespace AskMe.Services.UserServices
         Task<AuthResult> RegisterAsync(CreateUserDto userDto);
         Task<AuthResult> LoginAsync(string email, string password);
         Task<UserDto> GetUser(string userId);
+        Task<bool> ForgotPassword(string email);
     }
 }

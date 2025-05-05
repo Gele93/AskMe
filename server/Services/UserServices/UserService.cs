@@ -57,6 +57,11 @@ namespace AskMe.Services.UserServices
 
             return new UserDto(user.FirstName, user.LastName, user.SubscriptionLevel, user.Email, user.UserName);
         }
+        public Task<bool> ForgotPassword(string email)
+        {
+            throw new NotImplementedException();    
+        }
+
 
         private static AuthResult InvalidEmail(string email)
         {
