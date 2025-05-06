@@ -1,4 +1,5 @@
 ﻿using AskMe.Data.Models.AuthModels;
+using AskMe.Data.Models.ForgotPwRequests;
 using AskMe.Data.Models.UserModels;
 using AskMe.Services.UserServices;
 using Azure.Core;
@@ -120,6 +121,45 @@ namespace AskMe.Controllers
                 return StatusCode(500, "Forgot password failed.");
             }
         }
+
+        [HttpPost("update-password")]
+        public async Task<IActionResult> UpdatePassword([FromBody] UpdatePwRequest request)
+        {
+            try
+            {
+                var result = await _userService.UpdatePassword(request.Email, request.Token, request.NewPassword);
+
+                if (!result)
+                    return BadRequest("Invalid token or email");
+
+                return Ok("Password updated successfully.");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"An error occured while updating password: {ex.Message}");
+                return StatusCode(500, "Update password failed.");
+            }
+        }
+
+        [HttpPost("validate-newpw-route")]
+        public async Task<IActionResult> ValidateNewpwRoute([FromBody] NewPwRoute route)
+        {
+            try
+            {
+                var result = await _userService.ValidateNewpwRoute(route.Token, route.Email);
+
+                if (!result)
+                    return BadRequest("Invalid token");
+
+                return Ok("Token is valid.");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"An error occured while validating token: {ex.Message}");
+                return StatusCode(500, "Validate token failed.");
+            }
+        }
+
 
         private void AddErrors(AuthResult result)
         {

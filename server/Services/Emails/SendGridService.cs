@@ -22,7 +22,6 @@
 
         public async Task SendEmailAsync(string toEmail, string subject, string htmlContent)
         {
-            Console.WriteLine($"######################################################################################################## {_settings.ApiKey}");
 
             var client = new SendGridClient(_settings.ApiKey);
             var from = new EmailAddress(_settings.SenderEmail, _settings.SenderName);

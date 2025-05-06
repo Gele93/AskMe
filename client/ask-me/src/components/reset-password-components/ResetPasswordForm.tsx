@@ -1,24 +1,34 @@
 import React, { useEffect, useState } from 'react'
+import { ToastType, UpdatePwRequest } from '../../types/types'
+import { fetchUpdatePassword } from '../../scripts/scripts'
 
-function ResetPasswordForm() {
+function ResetPasswordForm({ email, token, useInfoToast }: { email: string, token: string, useInfoToast: any }) {
 
     const [password, setPassword] = useState<string>("")
     const [confirmPassword, setConfirmPassword] = useState<string>("")
     const [isPasswordMatching, setIsPasswordMatching] = useState<boolean>(true)
-    const [token, setToken] = useState<string>("")
-    const [email, setEmail] = useState<string>("")
+
+
+    const handleSubmit = async (e: any) => {
+        e.preventDefault()
+
+        const updatePwReq: UpdatePwRequest = {
+            Email: email,
+            Token: token,
+            NewPassword: password
+        }
+
+        if (await fetchUpdatePassword(updatePwReq)) {
+            useInfoToast("Password reset successfully.", ToastType.Ok)
+        } else {
+            useInfoToast("Something went wrong", ToastType.Fail)
+        }
+    }
 
     useEffect(() => {
-        const readToken: string = new URLSearchParams(window.location.search).get('token') || "";
-        const readEmail: string = new URLSearchParams(window.location.search).get('email') || "";
-        setToken(readToken)
-        setEmail(readEmail)
-    }, [])
+        setIsPasswordMatching(password == confirmPassword)
+    }, [confirmPassword])
 
-
-    const handleSubmit = (e: any) => {
-        e.preventDefault()
-    }
 
     return (
         <div className='w-[30vw] flex flex-col justify-around items-center rounded-4xl'>

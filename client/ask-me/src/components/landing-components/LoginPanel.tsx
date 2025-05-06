@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import LoginForm from './LoginForm';
 import ForgotForm from './ForgotForm';
 
-function LoginPanel() {
+function LoginPanel({ useInfoToast }: { useInfoToast: any }) {
 
     const [isForgot, setIsForgot] = useState<boolean>(false)
 
@@ -39,12 +39,20 @@ function LoginPanel() {
     }
 
     return (
-        <div className='flex flex-col justify-center items-center bg-accent-05 backdrop-blur-xs  rounded-l-4xl '>
+        <div className='flex flex-col justify-evenly items-center bg-accent-05 backdrop-blur-xs  rounded-l-4xl '>
             {isForgot ?
-                <ForgotForm />
+                <>
+                    <p className='absolute top-10 text-xs'>Enter your email to receive the link to reset your password</p>
+                    <ForgotForm useInfoToast={useInfoToast}/>
+                    <button
+                        onClick={() => setIsForgot(false)}
+                        className="absolute bottom-10 cursor-pointer rounded-4xl border px-8 hover:border-secondary hover:text-secondary hover:bg-accent">
+                        Back
+                    </button>
+                </>
                 :
                 <>
-                    <LoginForm handleLogin={handleLogin} email={email} setEmail={setEmail} password={password} setPassword={setPassword} setIsForgot={setIsForgot}/>
+                    <LoginForm handleLogin={handleLogin} email={email} setEmail={setEmail} password={password} setPassword={setPassword} setIsForgot={setIsForgot} />
                     {errorMsgs[0] &&
                         <div className='absolute text-fail h-20 bottom-[10%]'>
                             {errorMsgs.map(e => (

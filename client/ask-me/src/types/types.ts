@@ -132,3 +132,13 @@ export enum LearnStage {
     Finish
 }
 
+export interface UpdatePwRequest {
+    Email: string,
+    Token: string,
+    NewPassword: string
+}
+
+export interface NewPwRoute {
+    Token: string,
+    Email: string
+}
