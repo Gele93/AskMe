@@ -96,10 +96,12 @@ namespace AskMe
             builder.Services.Configure<DeepSeekSettings>(options =>
             {
                 options.ApiKey = Environment.GetEnvironmentVariable("DEEPSEEK_API_KEY") ?? builder.Configuration["OpenRouterKey"];
+                Console.WriteLine("DEEPSEEKAPIKEY >>>>>>>>>>>>>>" + options.ApiKey);
             });
             builder.Services.Configure<SendGridSettings>(options =>
             {
                 options.ApiKey = Environment.GetEnvironmentVariable("SENDGRID_API_KEY") ?? builder.Configuration["SendGrid:ApiKey"];
+                Console.WriteLine("SENDGRIDAPIKEY >>>>>>>>>>>>>>" + options.ApiKey);
                 options.SenderEmail = builder.Configuration["SendGrid:SenderEmail"];
                 options.SenderName = builder.Configuration["SendGrid:SenderName"];
             });
