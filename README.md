@@ -68,6 +68,7 @@
 - **DB_CONNECTION_STRING**
 - **DB_PASSWORD**
 - **DEEPSEEK_API_KEY**
+- **SENDGRID_API_KEY**
 
 ### 3.3 Compose
 ```sh
