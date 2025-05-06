@@ -13,7 +13,9 @@ namespace AskMe.Data.Context
         public DbSet<Question> Questions { get; set; }
         public DbSet<Answer> Answers { get; set; }
 
-        
+        public DbSet<PasswordToken> PasswordTokens { get; set; }
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

@@ -1,15 +1,20 @@
 ﻿using AskMe.Data.Entities;
 using AskMe.Data.Models.AuthModels;
+using AskMe.Data.Models.PasswordTokens;
 using AskMe.Data.Models.UserModels;
+using AskMe.Repositories.User;
+using AskMe.Services.Emails;
 using Microsoft.AspNetCore.Identity;
 
 namespace AskMe.Services.UserServices
 {
-    public class UserService(UserManager<User> userManager, ITokenService tokenService) : IUserService
+    public class UserService(UserManager<User> userManager, ITokenService tokenService, IUserRepository userRepository, SendGridEmailService emailService, ILogger<UserService> logger) : IUserService
     {
         private UserManager<User> _userManager = userManager;
         private ITokenService _tokenService;
-
+        private IUserRepository _userRepository = userRepository;
+        private SendGridEmailService _emailService = emailService;
+        private ILogger<UserService> _logger = logger;
 
         public async Task<AuthResult> RegisterAsync(CreateUserDto userDto)
         {
@@ -56,6 +61,92 @@ namespace AskMe.Services.UserServices
                 throw new Exception("User not found");
 
             return new UserDto(user.FirstName, user.LastName, user.SubscriptionLevel, user.Email, user.UserName);
+        }
+        public async Task<bool> ForgotPassword(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+                return false;
+
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var expDate = DateTime.UtcNow.AddMinutes(20);
+            var pwToken = new PasswordToken
+            {
+                UserId = user.Id,
+                Token = token,
+                ExpirationDate = expDate,
+                IsUsed = false
+            };
+
+            var createdToken = await _userRepository.CreatePasswordToken(pwToken);
+            var callbackUrl = $"http://localhost:5173/reset-password?token={createdToken.Token}&email={email}";
+            await _emailService.SendEmailAsync(email, "Reset Password", EmailTemplates.ResetPassword(token, email));
+            return true;
+        }
+
+        public async Task<bool> UpdatePassword(string email, string token, string newPassword)
+        {
+            var user = await GetUserOfValidToken(token);
+
+            if (user is null)
+                return false;
+
+            var pwToken = await _userRepository.GetPasswordToken(token);
+
+            var resetResult = await _userManager.ResetPasswordAsync(user, token, newPassword);
+
+            if (!resetResult.Succeeded)
+            {
+                _logger.LogError("reset pw failed");
+                return false;
+            }
+
+            await _userRepository.UseToken(pwToken);
+
+            return true;
+        }
+
+        public async Task<bool> ValidateNewpwRoute(string token, string email)
+        {
+            var user = await GetUserOfValidToken(token);
+
+            if (user is null)
+                return false;
+
+            if (user.Email != email)
+                return false;
+
+            return true;
+        }
+
+        private async Task<bool> ValidateToken(string token)
+        {
+            var pwToken = await _userRepository.GetPasswordToken(token);
+
+            if (pwToken == null || pwToken.IsUsed || pwToken.ExpirationDate < DateTime.UtcNow)
+                return false;
+
+            var user = await _userManager.FindByIdAsync(pwToken.UserId);
+
+            if (user == null)
+            {
+                _logger.LogError("user not found");
+                return false;
+            }
+
+            return true;
+        }
+
+        private async Task<User?> GetUserOfValidToken(string token)
+        {
+            if (!await ValidateToken(token))
+                return null;
+
+            var pwToken = await _userRepository.GetPasswordToken(token);
+            _logger.LogInformation(token + " token is valid, userId: " + pwToken.UserId + " expiration date: " + pwToken.ExpirationDate + " is used: " + pwToken.IsUsed);
+            var user = await _userManager.FindByIdAsync(pwToken.UserId);
+            _logger.LogInformation(user.Id + " user found, email: " + user.Email + " username: " + user.UserName + " subscription level: " + user.SubscriptionLevel + " is used: " + pwToken.IsUsed);
+            return user;
         }
 
         private static AuthResult InvalidEmail(string email)

@@ -1,4 +1,4 @@
-import { CreateUserDto, LoginUserDto, Set, Theme, User } from "../types/types";
+import { CreateUserDto, LoginUserDto, NewPwRoute, Set, Theme, UpdatePwRequest, User } from "../types/types";
 
 const api = "/api"
 
@@ -232,3 +232,70 @@ export const fetchDeleteTheme = async (themeId: number): Promise<boolean> => {
         return false;
     }
 };
+
+
+export const fetchForgotPasswordEmail = async (email: string): Promise<boolean> => {
+    try {
+        const response = await fetch(`${api}/user/forgot-password`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ "email": email }),
+        });
+
+        if (!response.ok) {
+            console.error('Failed to send forgot password email');
+            return false
+        }
+        console.log('Forgot password email sent successfully');
+        return true;
+    } catch (error) {
+        console.error('Error sending forgot password email:', error);
+        return false;
+    }
+}
+
+export const fetchUpdatePassword = async (updatePwReq: UpdatePwRequest): Promise<boolean> => {
+    try {
+        const response = await fetch(`${api}/user/update-password`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updatePwReq),
+        });
+
+        if (!response.ok) {
+            console.error('Failed to update password');
+            return false
+        }
+        console.log('Password updated successfully');
+        return true;
+    } catch (error) {
+        console.error('Error updating password:', error);
+        return false;
+    }
+}
+
+export const FetchValidateNewpwRoute = async (route: NewPwRoute): Promise<boolean> => {
+    try {
+        const response = await fetch(`${api}/user/validate-newpw-route`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(route),
+        });
+
+        if (!response.ok) {
+            console.error('Failed to validate new password route');
+            return false;
+        }
+        console.log('New password route validated successfully');
+        return true;
+    } catch (error) {
+        console.error('Error validating new password route:', error);
+        return false;
+    }
+}

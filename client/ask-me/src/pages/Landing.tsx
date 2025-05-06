@@ -30,7 +30,7 @@ function Landing({ useInfoToast }: { useInfoToast: any }) {
                 <LandingBanner />
                 <section className='grid grid-cols-2 h-[70%] self-center shadow-xl rounded-4xl border-4 border-[#eaf2ea]'>
                     {isLogin ?
-                        <LoginPanel />
+                        <LoginPanel useInfoToast={useInfoToast}/>
                         :
                         <section className='bg-accent rounded-l-4xl flex items-center justify-center cursor-pointer shadow-md shadow-black'
                             onClick={() => setIsLogin(!isLogin)}>

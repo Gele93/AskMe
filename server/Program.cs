@@ -17,6 +17,8 @@ using AskMe.Repositories.Sets;
 using AskMe.Services.Authenticators;
 using AskMe.Repositories.Themes;
 using AskMe.Services.Themes;
+using AskMe.Repositories.User;
+using AskMe.Services.Emails;
 
 namespace AskMe
 {
@@ -89,7 +91,19 @@ namespace AskMe
             builder.Services.AddScoped<RoleManager<IdentityRole>>();
             builder.Services.AddScoped<IAuthenticator, Authenticator>();
             builder.Services.AddScoped<IThemeRepository, ThemeRepository>();
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IThemeService, ThemeService>();
+            builder.Services.Configure<DeepSeekSettings>(options =>
+            {
+                options.ApiKey = Environment.GetEnvironmentVariable("DEEPSEEK_API_KEY") ?? builder.Configuration["OpenRouterKey"];
+            });
+            builder.Services.Configure<SendGridSettings>(options =>
+            {
+                options.ApiKey = Environment.GetEnvironmentVariable("SENDGRID_API_KEY") ?? builder.Configuration["SendGrid:ApiKey"];
+                options.SenderEmail = builder.Configuration["SendGrid:SenderEmail"];
+                options.SenderName = builder.Configuration["SendGrid:SenderName"];
+            });
+            builder.Services.AddScoped<SendGridEmailService>();
         }
 
 
@@ -173,7 +187,9 @@ namespace AskMe
                     options.Password.RequireLowercase = false;
                 })
                 .AddRoles<IdentityRole>()
-                .AddEntityFrameworkStores<AskMeContext>();
+                .AddEntityFrameworkStores<AskMeContext>()
+                .AddDefaultTokenProviders();
+            ;
         }
 
         static void AddCookiePolicy(WebApplicationBuilder builder)

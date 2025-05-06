@@ -1,18 +1,25 @@
 ﻿using AskMe.Data.Models.Utils;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Text.Json;
 
 namespace AskMe.Services.Formaters
 {
+    public class DeepSeekSettings
+    {
+        public string ApiKey { get; set; }
+    }
     public class TxtFormater : ITxtFormater
     {
         private readonly ILogger<TxtFormater> _logger;
-        private string _apiKey = "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";
+        private readonly DeepSeekSettings _deepSeekSettings;
 
-        public TxtFormater(ILogger<TxtFormater> logger)
+        public TxtFormater(ILogger<TxtFormater> logger, IOptions<DeepSeekSettings> settings)
         {
             _logger = logger;
+            _deepSeekSettings = settings.Value;
+            logger.LogInformation(settings.Value.ApiKey);
         }
 
         public async Task<string> GeneralizeText(string fileContent)
@@ -49,7 +56,7 @@ namespace AskMe.Services.Formaters
                     }
                 };
 
-                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _apiKey);
+                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _deepSeekSettings.ApiKey);
                 string json = JsonSerializer.Serialize(requestBody);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
                 HttpResponseMessage response = await client.PostAsync(url, content);

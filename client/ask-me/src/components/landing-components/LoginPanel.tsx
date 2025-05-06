@@ -1,10 +1,14 @@
 import React from 'react'
 import { useState } from 'react';
 import { LoginUserDto, User } from '../../types/types';
-import { fetchLoginUser } from '../../scripts/scripts';
+import { fetchForgotPasswordEmail, fetchLoginUser } from '../../scripts/scripts';
 import { useNavigate } from 'react-router-dom';
+import LoginForm from './LoginForm';
+import ForgotForm from './ForgotForm';
 
-function LoginPanel() {
+function LoginPanel({ useInfoToast }: { useInfoToast: any }) {
+
+    const [isForgot, setIsForgot] = useState<boolean>(false)
 
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
@@ -35,42 +39,28 @@ function LoginPanel() {
     }
 
     return (
-        <div className='flex flex-col justify-center items-center bg-accent-05 backdrop-blur-xs  rounded-l-4xl '>
-            <form className='flex flex-col justify-evenly items-center h-[35%] w-[25vw]' onSubmit={(e) => handleLogin(e)}>
-                <div className='flex justify-between w-[80%]'>
-                    <label className='grow-[0.5]' htmlFor="email">Email:</label>
-                    <input
-                        className='bg-white pl-1'
-                        type="email"
-                        id="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                    />
-                </div>
-                <div className='flex justify-between w-[80%]'>
-                    <label className='grow-[0.5]' htmlFor="password">Password:</label>
-                    <input
-                        className='bg-white pl-1'
-                        type="password"
-                        id="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                </div>
-                <div className='flex justify-center mt-5'>
+        <div className='flex flex-col justify-evenly items-center bg-accent-05 backdrop-blur-xs  rounded-l-4xl '>
+            {isForgot ?
+                <>
+                    <p className='absolute top-10 text-xs'>Enter your email to receive the link to reset your password</p>
+                    <ForgotForm useInfoToast={useInfoToast}/>
                     <button
-                        type="submit"
-                        className="cursor-pointer rounded-4xl border px-8 hover:border-secondary hover:text-secondary hover:bg-accent">
-                        Login
+                        onClick={() => setIsForgot(false)}
+                        className="absolute bottom-10 cursor-pointer rounded-4xl border px-8 hover:border-secondary hover:text-secondary hover:bg-accent">
+                        Back
                     </button>
-                </div>
-            </form >
-            {errorMsgs[0] &&
-                <div className='absolute text-fail h-20 bottom-[10%]'>
-                    {errorMsgs.map(e => (
-                        <p>{e}</p>
-                    ))}
-                </div>
+                </>
+                :
+                <>
+                    <LoginForm handleLogin={handleLogin} email={email} setEmail={setEmail} password={password} setPassword={setPassword} setIsForgot={setIsForgot} />
+                    {errorMsgs[0] &&
+                        <div className='absolute text-fail h-20 bottom-[10%]'>
+                            {errorMsgs.map(e => (
+                                <p>{e}</p>
+                            ))}
+                        </div>
+                    }
+                </>
             }
         </div >
     );
