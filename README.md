@@ -76,6 +76,7 @@ docker compose --build
 ```
 ### 3.5 External dependencies
 - https://openrouter.ai
+- https://app.sendgrid.com/
 
 ## 4. Architecture
 The project is built with a **RESTful API backend with ASP.NET** which is using an **MSSQL database** and a **component-based frontend with React**.
