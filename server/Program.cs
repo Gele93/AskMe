@@ -93,7 +93,16 @@ namespace AskMe
             builder.Services.AddScoped<IThemeRepository, ThemeRepository>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IThemeService, ThemeService>();
-            builder.Services.Configure<SendGridSettings>(builder.Configuration.GetSection("SendGrid"));
+            builder.Services.Configure<DeepSeekSettings>(options =>
+            {
+                options.ApiKey = Environment.GetEnvironmentVariable("DEEPSEEK_API_KEY") ?? builder.Configuration["OpenRouterKey"];
+            });
+            builder.Services.Configure<SendGridSettings>(options =>
+            {
+                options.ApiKey = Environment.GetEnvironmentVariable("SENDGRID_API_KEY") ?? builder.Configuration["SendGrid:ApiKey"];
+                options.SenderEmail = builder.Configuration["SendGrid:SenderEmail"];
+                options.SenderName = builder.Configuration["SendGrid:SenderName"];
+            });
             builder.Services.AddScoped<SendGridEmailService>();
         }
 

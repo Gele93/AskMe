@@ -8,6 +8,8 @@ services:
       - db
     environment:
       - DbConnectionString=${DB_CONNECTION_STRING}
+      - SENDGRID_API_KEY
+      - DEEPSEEK_API_KEY
   db:
     image: mcr.microsoft.com/mssql/server:latest
     container_name: askme-db
