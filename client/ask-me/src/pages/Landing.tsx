@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom'
 
 function Landing({ useInfoToast }: { useInfoToast: any }) {
 
-    const [isLogin, setIsLogin] = useState<boolean>(false)
+    const [isLogin, setIsLogin] = useState<boolean>(true)
     const navigate = useNavigate()
 
 

@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { ToastType, UpdatePwRequest } from '../../types/types'
 import { fetchUpdatePassword } from '../../scripts/scripts'
 
-function ResetPasswordForm({ email, token, useInfoToast }: { email: string, token: string, useInfoToast: any }) {
+function ResetPasswordForm({ email, token, useInfoToast, setIsSuccess }:
+    { email: string, token: string, useInfoToast: any, setIsSuccess: Dispatch<SetStateAction<boolean>> }) {
 
     const [password, setPassword] = useState<string>("")
     const [confirmPassword, setConfirmPassword] = useState<string>("")
@@ -19,7 +20,7 @@ function ResetPasswordForm({ email, token, useInfoToast }: { email: string, toke
         }
 
         if (await fetchUpdatePassword(updatePwReq)) {
-            useInfoToast("Password reset successfully.", ToastType.Ok)
+            setIsSuccess(true)
         } else {
             useInfoToast("Something went wrong", ToastType.Fail)
         }
