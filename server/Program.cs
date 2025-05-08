@@ -193,8 +193,8 @@ namespace AskMe
                 })
                 .AddGoogle("Google", options =>
                 {
-                    options.ClientId = "95719570455-umc1arslmmdl7po9c224anss88t5mknn.apps.googleusercontent.com";
-                    options.ClientSecret = "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";
+                    options.ClientId = Environment.GetEnvironmentVariable("OAUTH_CLIENT_ID") ?? config["Authentication:Google:ClientId"];
+                    options.ClientSecret = Environment.GetEnvironmentVariable("OAUTH_CLIENT_SECRET") ?? config["Authentication:Google:ClientSecret"];
                     options.CallbackPath = new PathString("/user/google-response");
                 });
 
