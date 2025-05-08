@@ -119,6 +119,51 @@ namespace AskMe.Services.UserServices
             return true;
         }
 
+        public async Task<AuthResult> LoginGoogleAsync(string email, string name)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+
+            if (user is null)
+            {
+                var userToAdd = new CreateUserDto
+                    (
+                        name.Split(' ')[0] ?? "FirstName",
+                        name.Split(' ')[1] ?? "LastName",
+                        0,
+                        email,
+                        Utilities.Normalizer.RemoveAccents(name.Split(' ')[0]) ?? email,
+                        Guid.NewGuid().ToString(),
+                        "User"
+                    );
+
+                _logger.LogInformation(email + " user not found, creating new user with name: " + name + " and email: " + email + " and password: " + userToAdd.Password + " and role: " + userToAdd.Role);
+
+                var regResult = await RegisterAsync(userToAdd);
+
+
+                if (!regResult.Success)
+                {
+                    _logger.LogError("registration failed");
+                    if (regResult.ErrorMessages != null)
+                    {
+                        foreach (var error in regResult.ErrorMessages)
+                        {
+                            _logger.LogError($"Registration error: {error}");
+                        }
+                    }
+                    return new AuthResult(false, email, "", "", "");
+                }
+            }
+
+            var managedUser = await _userManager.FindByEmailAsync(email);
+            var roles = await userManager.GetRolesAsync(managedUser);
+            var accessToken = tokenService.CreateToken(managedUser, roles[0]);
+
+            return new AuthResult(true, managedUser.Email, managedUser.UserName, accessToken, managedUser.Id);
+        }
+
+
+
         private async Task<bool> ValidateToken(string token)
         {
             var pwToken = await _userRepository.GetPasswordToken(token);

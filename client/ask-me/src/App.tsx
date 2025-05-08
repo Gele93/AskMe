@@ -82,7 +82,7 @@ function App() {
               path="dashboard"
               element={
                 <ProtectedRoute>
-                  <Dashboard useInfoToast={useInfoToast} openLearnThisPreset={openLearnThisPreset} user={user} sets={sets} setSets={setSets} />
+                  <Dashboard useInfoToast={useInfoToast} openLearnThisPreset={openLearnThisPreset} user={user} setUser={setUser} sets={sets} setSets={setSets} />
                 </ProtectedRoute>
               } />
 

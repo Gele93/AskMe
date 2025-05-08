@@ -299,3 +299,22 @@ export const FetchValidateNewpwRoute = async (route: NewPwRoute): Promise<boolea
         return false;
     }
 }
+
+export const fetchGetUser = async () :Promise<User> => {
+    try {
+        const response = await fetch(`${api}/user/get-user`, {
+            method: 'GET',
+            credentials: 'include',
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch user');
+        }
+
+        const user: User = await response.json();
+        return user;
+    } catch (error) {
+        console.error('Error fetching user:', error);
+        throw error;
+    }
+} 

@@ -3,9 +3,31 @@ using AskMe.Data.Models.Answers;
 using AskMe.Data.Models.Questions;
 using AskMe.Data.Models.Sets;
 using AskMe.Data.Models.Themes;
+using System.Globalization;
+using System.Text;
 
 namespace AskMe.Services.Utilities
 {
+    public static class Normalizer
+    {
+        public static string RemoveAccents(string input)
+        {
+            var normalizedString = input.Normalize(NormalizationForm.FormD);
+            var stringBuilder = new StringBuilder();
+
+            foreach (var c in normalizedString)
+            {
+                var unicodeCategory = CharUnicodeInfo.GetUnicodeCategory(c);
+                if (unicodeCategory != UnicodeCategory.NonSpacingMark)
+                {
+                    stringBuilder.Append(c);
+                }
+            }
+
+            return stringBuilder.ToString().Normalize(NormalizationForm.FormC);
+        }
+
+    }
     public static class DataConverter
     {
         public static SetDto SetToDto(Set set) => new SetDto
@@ -63,7 +85,7 @@ namespace AskMe.Services.Utilities
             .ToList()
         };
 
-        public static Answer DtoToAnswer (AnswerDto answerDto) => new Answer
+        public static Answer DtoToAnswer(AnswerDto answerDto) => new Answer
         {
             Id = answerDto.Id,
             Text = answerDto.Text,

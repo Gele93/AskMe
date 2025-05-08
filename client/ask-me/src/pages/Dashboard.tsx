@@ -3,11 +3,20 @@ import HeaderBar from '../components/HeaderBar'
 import DashboardBody from '../components/dashboard-components/DashboardBody'
 import { useState } from 'react'
 import { User, Set } from '../types/types'
-import { fetchGetSets } from '../scripts/scripts'
+import { fetchGetSets, fetchGetUser } from '../scripts/scripts'
 
-function Dashboard({ useInfoToast, openLearnThisPreset, user, sets, setSets }:
-     { useInfoToast: any, openLearnThisPreset: (set: Set | null) => void, user: User | null, sets: Set[], setSets: Dispatch<SetStateAction<Set[]>> }) {
+function Dashboard({ useInfoToast, openLearnThisPreset, user, setUser, sets, setSets }:
+    { useInfoToast: any, openLearnThisPreset: (set: Set | null) => void, user: User | null, setUser: Dispatch<SetStateAction<User | null>>, sets: Set[], setSets: Dispatch<SetStateAction<Set[]>> }) {
 
+    useEffect(() => {
+        const getUser = async () => {
+            let loggedInUser: User = await fetchGetUser()
+            localStorage.setItem("user", JSON.stringify(loggedInUser))
+            setUser(loggedInUser)
+            console.log(loggedInUser)
+        }
+        getUser()
+    }, [])
 
     useEffect(() => {
         const getSets = async () => {

@@ -3,6 +3,10 @@ using AskMe.Data.Models.ForgotPwRequests;
 using AskMe.Data.Models.UserModels;
 using AskMe.Services.UserServices;
 using Azure.Core;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity.Data;
@@ -12,7 +16,7 @@ using System.Security.Claims;
 namespace AskMe.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("user")]
     public class UserController : ControllerBase
     {
         private readonly ILogger<UserController> _logger;
@@ -91,11 +95,16 @@ namespace AskMe.Controllers
             return Ok("Logged out successfully");
         }
 
-        [Authorize]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPost("authorize")]
         public async Task<IActionResult> Authorize()
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var email = User.FindFirst(ClaimTypes.Email)?.Value;
+
+            _logger.LogInformation("USERID FROM CLAIM NAMEIDENTIFIER -->>>>>>>>>>>>" + userId);
+            _logger.LogInformation("EMAIL FROM CLAIM NAMEIDENTIFIER -->>>>>>>>>>>>" + email);
+
 
             if (userId is null) return Unauthorized();
 
@@ -160,6 +169,75 @@ namespace AskMe.Controllers
             }
         }
 
+        [HttpGet("signin-google")]
+        public async Task<IActionResult> SignInWithGoogle()
+        {
+            _logger.LogInformation("SIGN IN WITH GOOGLE >>>>>>>>>>>>>>>>>>");
+            //  var redirectUrl = Url.Action("GoogleResponse", "user");
+            var properties = new AuthenticationProperties { RedirectUri = "google-response-handle" };
+
+            return Challenge(properties, GoogleDefaults.AuthenticationScheme);
+        }
+
+        [HttpGet("google-response-handle")]
+        public async Task<IActionResult> GoogleResponse()
+        {
+            _logger.LogInformation("RESPONZZZZZZZZZZZZZZZZZZZZZ");
+            try
+            {
+                var googleResult = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+                if (!googleResult.Succeeded)
+                {
+                    _logger.LogError("Authentication failed.");
+                    return Unauthorized("Authentication failed.");
+                }
+
+                var claimsIdentity = (ClaimsIdentity)googleResult.Principal.Identity;
+                var email = claimsIdentity.FindFirst(ClaimTypes.Email)?.Value;
+                var name = claimsIdentity.FindFirst(ClaimTypes.Name)?.Value;
+
+                var result = await _userService.LoginGoogleAsync(email, name);
+
+                var cookieOptions = new CookieOptions
+                {
+                    Expires = DateTime.UtcNow.AddHours(1)
+                };
+
+                Response.Cookies.Append("AuthToken", result.Token, cookieOptions);
+
+                if (result.Success)
+                {
+                    return Redirect("http://localhost:5173/dashboard");
+                    //var user = await _userService.GetUser(result.UserId);
+                    //return Ok(user);
+                }
+
+                AddErrors(result);
+                return BadRequest(ModelState);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error in Google response: {ex.Message}");
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
+        [HttpGet("get-user")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> GetUser()
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (userId is null) return Unauthorized();
+
+            var user = await _userService.GetUser(userId);
+
+            if (user is null) return NotFound("User not found");
+
+            return Ok(user);
+        }
 
         private void AddErrors(AuthResult result)
         {

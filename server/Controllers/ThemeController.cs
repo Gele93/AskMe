@@ -3,6 +3,7 @@ using AskMe.Data.Models.Themes;
 using AskMe.Services.Authenticators;
 using AskMe.Services.Sets;
 using AskMe.Services.Themes;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -25,7 +26,7 @@ namespace AskMe.Controllers
         }
 
         [HttpGet("set/{setId:int}")]
-        [Authorize]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> GetThemesBySet(int setId)
         {
             try
@@ -49,7 +50,7 @@ namespace AskMe.Controllers
         }
 
         [HttpGet("theme/{themeId:int}")]
-        [Authorize]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> GetThemeById(int themeId)
         {
             try
@@ -73,7 +74,7 @@ namespace AskMe.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> CreateTheme([FromBody] ThemeDto theme)
         {
             try
@@ -98,7 +99,7 @@ namespace AskMe.Controllers
         }
 
         [HttpPatch]
-        [Authorize]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> UpdateTheme([FromBody] ThemeDto theme)
         {
             try
@@ -123,7 +124,7 @@ namespace AskMe.Controllers
         }
 
         [HttpDelete("{themeId:int}")]
-        [Authorize]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> DeleteTheme(int themeId)
         {
             try

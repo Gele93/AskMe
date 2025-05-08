@@ -19,6 +19,10 @@ using AskMe.Repositories.Themes;
 using AskMe.Services.Themes;
 using AskMe.Repositories.User;
 using AskMe.Services.Emails;
+using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.HttpOverrides;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace AskMe
 {
@@ -66,8 +70,15 @@ namespace AskMe
                 app.UseSwaggerUI();
             }
 
+            app.Use(async (context, next) =>
+            {
+                Console.WriteLine("Request Path: " + context.Request.Path);
+                await next();
+            });
+
             app.UseHttpsRedirection();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllers();
@@ -96,12 +107,10 @@ namespace AskMe
             builder.Services.Configure<DeepSeekSettings>(options =>
             {
                 options.ApiKey = Environment.GetEnvironmentVariable("DEEPSEEK_API_KEY") ?? builder.Configuration["OpenRouterKey"];
-                Console.WriteLine("DEEPSEEKAPIKEY >>>>>>>>>>>>>>" + options.ApiKey);
             });
             builder.Services.Configure<SendGridSettings>(options =>
             {
                 options.ApiKey = Environment.GetEnvironmentVariable("SENDGRID_API_KEY") ?? builder.Configuration["SendGrid:ApiKey"];
-                Console.WriteLine("SENDGRIDAPIKEY >>>>>>>>>>>>>>" + options.ApiKey);
                 options.SenderEmail = builder.Configuration["SendGrid:SenderEmail"];
                 options.SenderName = builder.Configuration["SendGrid:SenderName"];
             });
@@ -144,7 +153,16 @@ namespace AskMe
         static void AddAuthentication(WebApplicationBuilder builder, IConfiguration config)
         {
             builder.Services
-                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddAuthentication(options =>
+                {
+                    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+                })
+                .AddCookie(options =>
+                {
+                    options.Cookie.SecurePolicy = CookieSecurePolicy.None;
+                    options.Cookie.SameSite = SameSiteMode.Lax;
+                })
                 .AddJwtBearer(options =>
                 {
                     options.Events = new JwtBearerEvents
@@ -166,13 +184,20 @@ namespace AskMe
                         ValidateAudience = true,
                         ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
-                        ValidIssuer = config["Token:Issuer"],
+                        ValidIssuer = config["Token:Issuer"], 
                         ValidAudience = config["Token:Audience"],
                         IssuerSigningKey = new SymmetricSecurityKey(
                             Encoding.UTF8.GetBytes(config["Token:Key"])
                         ),
                     };
+                })
+                .AddGoogle("Google", options =>
+                {
+                    options.ClientId = "95719570455-umc1arslmmdl7po9c224anss88t5mknn.apps.googleusercontent.com";
+                    options.ClientSecret = "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";
+                    options.CallbackPath = new PathString("/user/google-response");
                 });
+
         }
 
         static void AddIdentity(WebApplicationBuilder webApplicationBuilder1)
