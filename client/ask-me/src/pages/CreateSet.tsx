@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import HeaderBar from '../components/HeaderBar'
+import HeaderBar from '../components/global-components/HeaderBar'
 import { Set, User } from '../types/types'
 import CreateSetBody from '../components/create-set-components/CreateSetBody'
 

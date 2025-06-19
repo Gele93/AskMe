@@ -1,7 +1,7 @@
 import React, { Dispatch, SetStateAction } from 'react'
 import { CgProfile } from "react-icons/cg";
 import { FaPlayCircle } from "react-icons/fa";
-import { Set } from '../types/types';
+import { Set } from '../../types/types';
 
 
 

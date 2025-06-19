@@ -1,6 +1,6 @@
 import { useState, useEffect, Dispatch, SetStateAction } from "react"
 import { Set, User } from "../types/types"
-import HeaderBar from "../components/HeaderBar"
+import HeaderBar from "../components/global-components/HeaderBar"
 
 function Questions({ openLearnThisPreset }: { openLearnThisPreset: (set: Set | null) => void }) {
   const [user, setUser] = useState<User | null>(null)

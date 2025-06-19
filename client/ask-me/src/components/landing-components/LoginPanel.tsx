@@ -38,12 +38,17 @@ function LoginPanel({ useInfoToast }: { useInfoToast: any }) {
         setErrorMsgs(updatedErrorMsg)
     }
 
+    const handleLoginWithGoogle = () => {
+        const url = "/api/user/signin-google"
+        window.location.href = url
+    }
+
     return (
         <div className='flex flex-col justify-evenly items-center bg-accent-05 backdrop-blur-xs  rounded-l-4xl '>
             {isForgot ?
                 <>
                     <p className='absolute top-10 text-xs'>Enter your email to receive the link to reset your password</p>
-                    <ForgotForm useInfoToast={useInfoToast}/>
+                    <ForgotForm useInfoToast={useInfoToast} />
                     <button
                         onClick={() => setIsForgot(false)}
                         className="absolute bottom-10 cursor-pointer rounded-4xl border px-8 hover:border-secondary hover:text-secondary hover:bg-accent">
@@ -52,7 +57,7 @@ function LoginPanel({ useInfoToast }: { useInfoToast: any }) {
                 </>
                 :
                 <>
-                    <LoginForm handleLogin={handleLogin} email={email} setEmail={setEmail} password={password} setPassword={setPassword} setIsForgot={setIsForgot} />
+                    <LoginForm handleLogin={handleLogin} email={email} setEmail={setEmail} password={password} setPassword={setPassword} setIsForgot={setIsForgot} handleLoginWithGoogle={handleLoginWithGoogle} />
                     {errorMsgs[0] &&
                         <div className='absolute text-fail h-20 bottom-[10%]'>
                             {errorMsgs.map(e => (

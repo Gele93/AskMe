@@ -14,7 +14,6 @@ function Landing({ useInfoToast }: { useInfoToast: any }) {
     useEffect(() => {
         const verifyAuth = async () => {
             const result = await checkAuthorization()
-            console.log(result)
             if (result) navigate("/dashboard")
         };
         verifyAuth();
@@ -34,13 +33,13 @@ function Landing({ useInfoToast }: { useInfoToast: any }) {
                         :
                         <section className='bg-accent rounded-l-4xl flex items-center justify-center cursor-pointer shadow-md shadow-black'
                             onClick={() => setIsLogin(!isLogin)}>
-                            <button className='text-3xl text-secondary'>Login</button>
+                            <button className='text-3xl text-secondary cursor-pointer'>Login</button>
                         </section>
                     }
                     {isLogin ?
                         <section className='bg-accent rounded-r-4xl flex items-center justify-center cursor-pointer shadow-md shadow-black'
                             onClick={() => setIsLogin(!isLogin)}>
-                            <button className='text-3xl text-secondary' >Register</button>
+                            <button className='text-3xl text-secondary cursor-pointer'>Register</button>
                         </section>
                         :
                         <RegisterPanel useInfoToast={useInfoToast} setIsLogin={setIsLogin} />

@@ -8,6 +8,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.AspNetCore.DataProtection;
 using AskMe.Services.Authenticators;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace AskMe.Controllers
 {
@@ -68,7 +69,7 @@ namespace AskMe.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> CreateSet(SetDto setData)
         {
             try
@@ -88,7 +89,7 @@ namespace AskMe.Controllers
         }
 
 
-        [Authorize]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -108,7 +109,7 @@ namespace AskMe.Controllers
             }
         }
 
-        [Authorize]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpDelete("{setId:int}")]
         public async Task<IActionResult> DeleteSet(int setId)
         {

@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import './App.css'
 import Landing from './pages/Landing'
 import Dashboard from './pages/Dashboard'
-import Sidebar from './components/Sidebar'
+import Sidebar from './components/global-components/Sidebar'
 import Sets from './pages/Sets'
 import Questions from './pages/Questions'
 import Profile from './pages/Profile'
@@ -37,6 +37,11 @@ function App() {
     }
   }, [])
 
+  /**
+ * Uses info toast popup (8s).
+ * @param {string} text - Text to show.
+ * @param {ToastType} type - Type of message.
+ */
   const useInfoToast = (text: string, type: ToastType) => {
     setToastType(type)
     setToastText(text)
@@ -82,7 +87,7 @@ function App() {
               path="dashboard"
               element={
                 <ProtectedRoute>
-                  <Dashboard useInfoToast={useInfoToast} openLearnThisPreset={openLearnThisPreset} user={user} sets={sets} setSets={setSets} />
+                  <Dashboard useInfoToast={useInfoToast} openLearnThisPreset={openLearnThisPreset} user={user} setUser={setUser} sets={sets} setSets={setSets} />
                 </ProtectedRoute>
               } />
 
@@ -118,7 +123,7 @@ function App() {
               path="sets/create"
               element={
                 <ProtectedRoute>
-                  <CreateSet useInfoToast={useInfoToast} openLearnThisPreset={openLearnThisPreset}/>
+                  <CreateSet useInfoToast={useInfoToast} openLearnThisPreset={openLearnThisPreset} />
                 </ProtectedRoute>
               } />
             <Route

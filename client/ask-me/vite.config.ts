@@ -12,6 +12,7 @@ export default defineConfig({
     proxy: {
       '/api': {
         target: 'http://localhost:8080',
+ //       target: 'http://askme-server-1:8080',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '')
       }

@@ -21,7 +21,7 @@ function SetsBody({ sets, setSets, useInfoToast, openLearnThisPreset }:
 
     return (
         <>
-            <SetsTable sets={sets} setEditSet={setEditSet} />
+            <SetsTable sets={sets} setSets={setSets} setEditSet={setEditSet} useInfoToast={useInfoToast} />
             <div className='mx-auto'>
                 <BigActionButton text='Create new' action={handleAddNewSet} />
             </div>

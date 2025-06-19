@@ -13,5 +13,6 @@ namespace AskMe.Services.UserServices
         Task<bool> ForgotPassword(string email);
         Task<bool> UpdatePassword(string email, string token, string newPassword);
         Task<bool> ValidateNewpwRoute(string token, string email);
+        Task <AuthResult> LoginGoogleAsync(string email, string name);
     }
 }
