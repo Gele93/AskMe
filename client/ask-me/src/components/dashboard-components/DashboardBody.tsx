@@ -1,6 +1,6 @@
 import React, { Dispatch, useState } from 'react'
 import { Set } from '../../types/types';
-import ActionTile from '../ActionTile'
+import ActionTile from '../utilities/ActionTile'
 import SetTile from './SetTile';
 import { RiFolderAddFill } from "react-icons/ri";
 import { AiTwotoneFolderAdd, AiFillFileAdd, AiTwotoneFileAdd, AiOutlineFileAdd } from "react-icons/ai";

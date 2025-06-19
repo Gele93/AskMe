@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { Set, User } from "../types/types"
-import HeaderBar from "../components/HeaderBar"
+import HeaderBar from "../components/global-components/HeaderBar"
 import { fetchGetSets } from "../scripts/scripts"
 import SetsBody from "../components/sets-components/SetsBody"
 

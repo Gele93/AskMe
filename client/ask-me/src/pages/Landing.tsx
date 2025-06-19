@@ -14,7 +14,6 @@ function Landing({ useInfoToast }: { useInfoToast: any }) {
     useEffect(() => {
         const verifyAuth = async () => {
             const result = await checkAuthorization()
-            console.log(result)
             if (result) navigate("/dashboard")
         };
         verifyAuth();

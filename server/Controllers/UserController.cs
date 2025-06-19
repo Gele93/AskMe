@@ -182,7 +182,6 @@ namespace AskMe.Controllers
         [HttpGet("google-response-handle")]
         public async Task<IActionResult> GoogleResponse()
         {
-            _logger.LogInformation("RESPONZZZZZZZZZZZZZZZZZZZZZ");
             try
             {
                 var googleResult = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
@@ -209,8 +208,6 @@ namespace AskMe.Controllers
                 if (result.Success)
                 {
                     return Redirect("http://localhost:5173/dashboard");
-                    //var user = await _userService.GetUser(result.UserId);
-                    //return Ok(user);
                 }
 
                 AddErrors(result);

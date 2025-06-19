@@ -6,8 +6,8 @@ import { BsQuestionCircle } from "react-icons/bs";
 import { FaSitemap } from "react-icons/fa";
 import { CgProfile } from "react-icons/cg";
 import { IoSettingsOutline } from "react-icons/io5";
-import { fetchLogoutUser } from '../scripts/scripts';
-import SideBarLink from './utilities/SideBarLink';
+import { fetchLogoutUser } from '../../scripts/scripts';
+import SideBarLink from '../utilities/SideBarLink';
 
 function Sidebar() {
 

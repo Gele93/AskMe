@@ -136,10 +136,7 @@ namespace AskMe.Services.UserServices
                         "User"
                     );
 
-                _logger.LogInformation(email + " user not found, creating new user with name: " + name + " and email: " + email + " and password: " + userToAdd.Password + " and role: " + userToAdd.Role);
-
                 var regResult = await RegisterAsync(userToAdd);
-
 
                 if (!regResult.Success)
                 {

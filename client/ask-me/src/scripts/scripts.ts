@@ -127,7 +127,6 @@ export const fetchGetSets = async (): Promise<Set[]> => {
     }
 };
 
-
 export const shortenTitle = (title: string, maxLength: number) => {
     if (!title) return
     if (title.length < maxLength) return title
@@ -300,7 +299,7 @@ export const FetchValidateNewpwRoute = async (route: NewPwRoute): Promise<boolea
     }
 }
 
-export const fetchGetUser = async () :Promise<User> => {
+export const fetchGetUser = async (): Promise<User> => {
     try {
         const response = await fetch(`${api}/user/get-user`, {
             method: 'GET',

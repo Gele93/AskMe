@@ -1,5 +1,5 @@
 import React, { Dispatch, SetStateAction, useEffect } from 'react'
-import HeaderBar from '../components/HeaderBar'
+import HeaderBar from '../components/global-components/HeaderBar'
 import DashboardBody from '../components/dashboard-components/DashboardBody'
 import { useState } from 'react'
 import { User, Set } from '../types/types'

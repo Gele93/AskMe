@@ -13,6 +13,7 @@
     --color-success: #5E946A;
     --color-success-50: #5E946A80; 
     --color-fail: #C56A64;
+    --color-fail-50: #C56A6480;
     --color-warning: #D99A4E;
 
     --gradient-success: radial-gradient(
